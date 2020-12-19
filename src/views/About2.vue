@@ -311,8 +311,6 @@ img {
 .cards {
   margin-bottom: 3rem;
 }
-<<<<<<< HEAD
-=======
 table {
   margin-top: 1rem;
   width: 100%;
@@ -325,5 +323,4 @@ table {
     }
   }
 }
->>>>>>> develop
 </style>
