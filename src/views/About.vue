@@ -9,7 +9,7 @@
             <button
               type="button"
               class="btn btn-primary"
-              @click="fahrenheit = !fahrenheit"
+              @click="celsius = !celsius"
             >
               °C <i class="fas fa-exchange-alt"></i> ℉
             </button>
@@ -38,6 +38,7 @@
                       </tr>
                     </thead>
                     <tbody v-for="(item, index) in cities" :key="index">
+                      <!-- 白天 -->
                       <tr class="day">
                         <th scope="col" class="table-primary" rowspan="3">
                           {{ item.locationName }}
@@ -50,10 +51,16 @@
                           :key="index"
                         >
                           <span>{{ item2.status }}</span>
-                          <p v-if="fahrenheit">{{ item2.fahrenheit }}</p>
-                          <p v-else>{{ item2.celsius }}</p>
+                          <p v-if="celsius">
+                            {{ item2.minCelsius }} - {{ item2.maxCelsius }} °C
+                          </p>
+                          <p v-else>
+                            {{ item2.minFahrenheit }} -
+                            {{ item2.maxFahrenheit }} ℉
+                          </p>
                         </td>
                       </tr>
+                      <!-- 晚上 -->
                       <tr class="night">
                         <td class="table-primary">晚上</td>
                         <td
@@ -61,19 +68,24 @@
                           :key="index"
                         >
                           <span>{{ item2.status }}</span>
-                          <p v-if="fahrenheit">{{ item2.fahrenheit }}</p>
-                          <p v-else>{{ item2.celsius }}</p>
+                          <p v-if="celsius">
+                            {{ item2.celsius }} - {{ item2.celsius }} °C
+                          </p>
+                          <p v-else>
+                            {{ item2.fahrenheit }} - {{ item2.fahrenheit }} ℉
+                          </p>
                         </td>
                       </tr>
+                      <!-- 均溫 -->
                       <tr class="average">
-                        <td class="table-primary">平均溫度</td>
+                        <td class="table-primary">全天溫度</td>
                         <td
                           v-for="(item2, index) in item.weatherAvg"
                           :key="index"
                         >
                           <span>{{ item2.status }}</span>
-                          <p v-if="fahrenheit">{{ item2.fahrenheit }}</p>
-                          <p v-else>{{ item2.celsius }}</p>
+                          <p v-if="celsius">{{ item2.celsius }} °C</p>
+                          <p v-else>{{ item2.fahrenheit }} ℉</p>
                         </td>
                       </tr>
                     </tbody>
@@ -1167,8 +1179,6 @@
               </b-tab>
             </b-tabs>
           </section>
-
-          <!-- table -->
         </div>
       </div>
     </div>
@@ -1188,9 +1198,14 @@ export default {
       subject: null,
       timeNow: "",
       timeAfterWeenk: "",
-      Celsius: 0,
-      fahrenheit: true,
-      area: [["台北市", "桃園市", "新北市"], ["台中"]],
+      celsius: true,
+      area: [
+        ["臺北市", "新北市"],
+        ["臺中市"],
+        ["臺南市", "高雄市"],
+        ["花蓮市"],
+        ["金門縣"],
+      ],
       range: -1,
       daylist: [],
       cities: [],
@@ -1219,22 +1234,6 @@ export default {
         return (couty = item.location);
       }
     },
-    getHighTemp() {},
-    getLowTemp() {},
-    getAvgWeather() {
-      let temperature = [];
-      for (const item of this.weatherItems) {
-        for (const location of item.location) {
-          for (let weatherEl of location.weatherElement) {
-            for (let time of weatherEl.time) {
-              for (let elementVal of time.elementValue) {
-                console.log(elementVal);
-              }
-            }
-          }
-        }
-      }
-    },
   },
   created() {
     this.getApi();
@@ -1243,7 +1242,7 @@ export default {
     getApi() {
       this.$http.get(weather).then((res) => {
         this.weatherItems = res.data.records.locations;
-        console.log(this.weatherItems);
+        // console.log(this.weatherItems);
         this.getData();
       });
     },
@@ -1252,17 +1251,19 @@ export default {
       this.getData();
     },
     getData() {
+      //取日期
       this.daylist = [];
       for (let i = 0; i < 7; i++) {
         let day = moment().add(i, "days");
         let week = day.format("E") * 1;
         this.daylist.push({
           date: day.format("MM/DD"),
-          d: day.format("YYYY-MM-DD"),
+          d: day.format("YYYY-MM-DD"), //驗證用
           week: this.toWeek(week * 1),
           holiday: week === 6 || week === 7,
         });
       }
+      //取城市
       this.cities = [];
       let locations = this.weatherItems[0].location;
       let location2 = [];
@@ -1274,55 +1275,72 @@ export default {
       } else {
         location2 = locations;
       }
-      console.log(location2);
 
+      //取得縣市溫度資料
       location2.forEach((item) => {
+        console.log(item);
         let weatherDay = [];
         let weatherNight = [];
         let weatherAvg = [];
         let dayT = item.weatherElement[0].time;
-        let maxT = item.weatherElement[2].time;
-        let minT = item.weatherElement[3].time;
         let weatherDec = item.weatherElement[1].time;
-        //白天
+        let minT = item.weatherElement[2].time;
+        let maxT = item.weatherElement[3].time;
+
         this.daylist.forEach((item) => {
           let date = item.d;
+          // 均溫
           let dayTItem = dayT.find(
             (dayTtime) =>
               dayTtime.startTime === date + " 06:00:00" ||
               dayTtime.startTime === date + " 12:00:00"
           );
+         
+          //最高溫
           let maxTItem = maxT.find(
             (dayTtime) =>
               dayTtime.startTime === date + " 06:00:00" ||
               dayTtime.startTime === date + " 12:00:00"
           );
+
+          //最低溫
           let minTItem = minT.find(
             (dayTtime) =>
               dayTtime.startTime === date + " 06:00:00" ||
               dayTtime.startTime === date + " 12:00:00"
           );
+          //天氣說明
           let weatherDecItem = weatherDec.find(
             (dayTtime) =>
               dayTtime.startTime === date + " 06:00:00" ||
               dayTtime.startTime === date + " 12:00:00"
           );
           weatherDay.push({
+            //天氣概況
             status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
-            fahrenheit: dayTItem ? dayTItem.elementValue[0].value : "",
-            celsius: "16",
+            //最低攝氏
+            minCelsius: minTItem ? minTItem.elementValue[0].value : "",
+            //最高攝氏
+            maxCelsius: maxTItem ? maxTItem.elementValue[0].value : "",
+            //最低華氏
+            minFahrenheit: ((this.minCelsius + 32)*1.8).toFixed(0),
+            //最高華氏
+            maxFahrenheit: ((this.maxCelsius + 32)*1.8).toFixed(0),
           });
           weatherNight.push({
             status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
-            fahrenheit: dayTItem ? dayTItem.elementValue[0].value : "",
-            celsius: "16",
+            celsius: dayTItem ? dayTItem.elementValue[0].value : "",
+            fahrenheit: ((this.celsius + 32)*1.8).toFixed(0),
           });
           weatherAvg.push({
             status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
-            fahrenheit: dayTItem ? dayTItem.elementValue[0].value : "",
-            celsius: "16",
+            celsius: dayTItem ? dayTItem.elementValue[0].value : "",
+            fahrenheit: ((this.celsius + 32)*1.8).toFixed(0)
           });
         });
+
+        //?如果加晚上的資料是在這邊新增，然後更換時段就好嗎?
+
         this.cities.push({
           locationName: item.locationName,
           weatherDay: weatherDay,
@@ -1350,9 +1368,6 @@ export default {
         default:
           return "";
       }
-    },
-    getHumanDate(date) {
-      return moment(date, "YYYY-MM-DD").format("DD/MM/YYYY");
     },
   },
 };
