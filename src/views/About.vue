@@ -24,9 +24,9 @@
                         <th
                           scope="col"
                           v-for="(item, index) in daylist"
-                          :key="index" :class="{'holiday':item.holiday}"
+                          :key="index"
+                          :class="{ holiday: item.holiday }"
                         >
-                     
                           <span>{{ item.date }}</span>
                           <br />
                           <span>{{ item.week }}</span>
@@ -37,12 +37,15 @@
                       <tr class="day">
                         <th scope="col" class="table-primary" rowspan="3">
                           {{ item.locationName }}
-                          {{item.weatherDay.length}}
+                          {{ item.weatherDay.length }}
                         </th>
                         <td class="table-primary">
                           <span>早上</span>
                         </td>
-                        <td v-for="(item2,index) in item.weatherDay" :key="index">
+                        <td
+                          v-for="(item2, index) in item.weatherDay"
+                          :key="index"
+                        >
                           <span>{{ item2.status }}</span>
                           <p v-if="ffff">{{ item2.fahrenheit }}</p>
                           <p v-else>{{ item2.cccc }}</p>
@@ -50,7 +53,10 @@
                       </tr>
                       <tr class="night">
                         <td class="table-primary">晚上</td>
-                        <td v-for="(item2,index) in item.weatherNight" :key="index">
+                        <td
+                          v-for="(item2, index) in item.weatherNight"
+                          :key="index"
+                        >
                           <span>{{ item2.status }}</span>
                           <p v-if="ffff">{{ item2.fahrenheit }}</p>
                           <p v-else>{{ item2.cccc }}</p>
@@ -58,7 +64,10 @@
                       </tr>
                       <tr class="average">
                         <td class="table-primary">平均溫度</td>
-                        <td v-for="(item2,index) in item.weatherAvg" :key="index">
+                        <td
+                          v-for="(item2, index) in item.weatherAvg"
+                          :key="index"
+                        >
                           <span>{{ item2.status }}</span>
                           <p v-if="ffff">{{ item2.fahrenheit }}</p>
                           <p v-else>{{ item2.cccc }}</p>
@@ -1160,8 +1169,6 @@
         </div>
       </div>
     </div>
-
-   
   </div>
 </template>
 
@@ -1219,8 +1226,7 @@ export default {
           holiday: false,
         },
       ],
-      cities: [
-      ],
+      cities: [],
     };
   },
 
@@ -1237,7 +1243,9 @@ export default {
       return time;
     },
     setLastDate() {
-      let time = moment().add(6, "days").format("L hh:mm:ss");
+      let time = moment()
+        .add(6, "days")
+        .format("L hh:mm:ss");
       return time;
     },
     getLocation() {
@@ -1274,15 +1282,15 @@ export default {
         this.getData();
       });
     },
-    getArea(k){
-this.range=k;
-this.getData();
+    getArea(k) {
+      this.range = k;
+      this.getData();
     },
     getData() {
       this.daylist = [];
       for (let i = 0; i < 7; i++) {
         let day = moment().add(i, "days");
-        let week = day.format("E")*1;
+        let week = day.format("E") * 1;
         this.daylist.push({
           date: day.format("MM/DD"),
           d: day.format("YYYY-MM-DD"),
@@ -1291,20 +1299,20 @@ this.getData();
         });
       }
       this.cities = [];
-      let locations=this.weatherItems[0].location ;
-      let location2 =[];
-      if(this.range != -1) {
+      let locations = this.weatherItems[0].location;
+      let location2 = [];
+      if (this.range != -1) {
         let assignArea = this.area[this.range];
-location2 = location.filter(element=>
-  assignArea.indexOf(element.locationName)>=0
-);
-      }else{
+        location2 = location.filter(
+          (element) => assignArea.indexOf(element.locationName) >= 0
+        );
+      } else {
         location2 = locations;
       }
       console.log(location2);
- 
+
       location2.forEach((item) => {
-             let weatherDay = [];
+        let weatherDay = [];
         let weatherNight = [];
         let weatherAvg = [];
         let dayT = item.weatherElement[0].time;
@@ -1339,12 +1347,12 @@ location2 = location.filter(element=>
             fahrenheit: dayTItem ? dayTItem.elementValue[0].value : "",
             cccc: "16",
           });
-                    weatherNight.push({
+          weatherNight.push({
             status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
             fahrenheit: dayTItem ? dayTItem.elementValue[0].value : "",
             cccc: "16",
           });
-                    weatherAvg.push({
+          weatherAvg.push({
             status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
             fahrenheit: dayTItem ? dayTItem.elementValue[0].value : "",
             cccc: "16",
@@ -1354,7 +1362,7 @@ location2 = location.filter(element=>
           locationName: item.locationName,
           weatherDay: weatherDay,
           weatherNight: weatherNight,
-          weatherAvg: weatherAvg
+          weatherAvg: weatherAvg,
         });
       });
     },
@@ -1436,6 +1444,7 @@ table {
     }
   }
 }
-.holiday{
-  background-color: red;}
+.holiday {
+  background-color: red;
+}
 </style>
