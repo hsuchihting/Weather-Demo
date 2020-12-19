@@ -9,7 +9,7 @@
             <button
               type="button"
               class="btn btn-primary"
-              @click="changeTemperature"
+              @click="fahrenheit = !fahrenheit"
             >
               °C <i class="fas fa-exchange-alt"></i> ℉
             </button>
@@ -25,20 +25,19 @@
                       <tr>
                         <th scope="col">縣市</th>
                         <th scope="col">時間</th>
-                        <th scope="col">
-                          <span>12/19</span>
+                        <th
+                          scope="col"
+                          v-for="(item, index) in daylist"
+                          :key="index"
+                          :class="{ holiday: item.holiday }"
+                        >
+                          <span>{{ item.date }}</span>
                           <br />
-                          <span>星期六</span>
+                          <span>{{ item.week }}</span>
                         </th>
-                        <th scope="col">星期天</th>
-                        <th scope="col">星期一</th>
-                        <th scope="col">星期二</th>
-                        <th scope="col">星期三</th>
-                        <th scope="col">星期四</th>
-                        <th scope="col">星期五</th>
                       </tr>
                     </thead>
-                    <tbody v-for="(item, index) in getLocation" :key="index" >
+                    <tbody v-for="(item, index) in cities" :key="index">
                       <tr class="day">
                         <th scope="col" class="table-primary" rowspan="3">
                           {{ item.locationName }}
@@ -46,95 +45,35 @@
                         <td class="table-primary">
                           <span>早上</span>
                         </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
+                        <td
+                          v-for="(item2, index) in item.weatherDay"
+                          :key="index"
+                        >
+                          <span>{{ item2.status }}</span>
+                          <p v-if="fahrenheit">{{ item2.fahrenheit }}</p>
+                          <p v-else>{{ item2.celsius }}</p>
                         </td>
                       </tr>
                       <tr class="night">
                         <td class="table-primary">晚上</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
+                        <td
+                          v-for="(item2, index) in item.weatherNight"
+                          :key="index"
+                        >
+                          <span>{{ item2.status }}</span>
+                          <p v-if="fahrenheit">{{ item2.fahrenheit }}</p>
+                          <p v-else>{{ item2.celsius }}</p>
                         </td>
                       </tr>
-                      <tr class="average" >
-                        <td class="table-primary" >平均溫度</td>
-                        <td >
-                          <span>陰有雨</span>
-                          <p >{{item.value}} 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
+                      <tr class="average">
+                        <td class="table-primary">平均溫度</td>
+                        <td
+                          v-for="(item2, index) in item.weatherAvg"
+                          :key="index"
+                        >
+                          <span>{{ item2.status }}</span>
+                          <p v-if="fahrenheit">{{ item2.fahrenheit }}</p>
+                          <p v-else>{{ item2.celsius }}</p>
                         </td>
                       </tr>
                     </tbody>
@@ -1250,6 +1189,11 @@ export default {
       timeNow: "",
       timeAfterWeenk: "",
       Celsius: 0,
+      fahrenheit: true,
+      area: [["台北市", "桃園市", "新北市"], ["台中"]],
+      range: -1,
+      daylist: [],
+      cities: [],
     };
   },
 
@@ -1299,19 +1243,113 @@ export default {
     getApi() {
       this.$http.get(weather).then((res) => {
         this.weatherItems = res.data.records.locations;
-        // console.log(this.weatherItems);
+        console.log(this.weatherItems);
+        this.getData();
       });
     },
-    changeTemperature() {
-      alert("溫度單位轉換");
-      // celsius:{
-      // 	get(){
-      // 	return (5 / 9) * (fahrenheit - 32);
-      // 	},
-      // 		set(val){
-      // 	return (9/5) * (val + 32);
-      // 	}
-      // }
+    getArea(k) {
+      this.range = k;
+      this.getData();
+    },
+    getData() {
+      this.daylist = [];
+      for (let i = 0; i < 7; i++) {
+        let day = moment().add(i, "days");
+        let week = day.format("E") * 1;
+        this.daylist.push({
+          date: day.format("MM/DD"),
+          d: day.format("YYYY-MM-DD"),
+          week: this.toWeek(week * 1),
+          holiday: week === 6 || week === 7,
+        });
+      }
+      this.cities = [];
+      let locations = this.weatherItems[0].location;
+      let location2 = [];
+      if (this.range != -1) {
+        let assignArea = this.area[this.range];
+        location2 = location.filter(
+          (element) => assignArea.indexOf(element.locationName) >= 0
+        );
+      } else {
+        location2 = locations;
+      }
+      console.log(location2);
+
+      location2.forEach((item) => {
+        let weatherDay = [];
+        let weatherNight = [];
+        let weatherAvg = [];
+        let dayT = item.weatherElement[0].time;
+        let maxT = item.weatherElement[2].time;
+        let minT = item.weatherElement[3].time;
+        let weatherDec = item.weatherElement[1].time;
+        //白天
+        this.daylist.forEach((item) => {
+          let date = item.d;
+          let dayTItem = dayT.find(
+            (dayTtime) =>
+              dayTtime.startTime === date + " 06:00:00" ||
+              dayTtime.startTime === date + " 12:00:00"
+          );
+          let maxTItem = maxT.find(
+            (dayTtime) =>
+              dayTtime.startTime === date + " 06:00:00" ||
+              dayTtime.startTime === date + " 12:00:00"
+          );
+          let minTItem = minT.find(
+            (dayTtime) =>
+              dayTtime.startTime === date + " 06:00:00" ||
+              dayTtime.startTime === date + " 12:00:00"
+          );
+          let weatherDecItem = weatherDec.find(
+            (dayTtime) =>
+              dayTtime.startTime === date + " 06:00:00" ||
+              dayTtime.startTime === date + " 12:00:00"
+          );
+          weatherDay.push({
+            status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
+            fahrenheit: dayTItem ? dayTItem.elementValue[0].value : "",
+            celsius: "16",
+          });
+          weatherNight.push({
+            status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
+            fahrenheit: dayTItem ? dayTItem.elementValue[0].value : "",
+            celsius: "16",
+          });
+          weatherAvg.push({
+            status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
+            fahrenheit: dayTItem ? dayTItem.elementValue[0].value : "",
+            celsius: "16",
+          });
+        });
+        this.cities.push({
+          locationName: item.locationName,
+          weatherDay: weatherDay,
+          weatherNight: weatherNight,
+          weatherAvg: weatherAvg,
+        });
+      });
+    },
+    toWeek(week) {
+      switch (week) {
+        case 1:
+          return "星期一";
+        case 2:
+          return "星期二";
+        case 3:
+          return "星期三";
+        case 4:
+          return "星期四";
+        case 5:
+          return "星期五";
+        case 6:
+          return "星期六";
+        case 7:
+          return "星期日";
+        default:
+          return "";
+      }
     },
     getHumanDate(date) {
       return moment(date, "YYYY-MM-DD").format("DD/MM/YYYY");
@@ -1359,5 +1397,9 @@ table {
       margin-bottom: 0;
     }
   }
+}
+.holiday {
+  background-color: #f4511e;
+  color: #fff;
 }
 </style>

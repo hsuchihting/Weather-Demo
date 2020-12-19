@@ -311,4 +311,19 @@ img {
 .cards {
   margin-bottom: 3rem;
 }
+<<<<<<< HEAD
+=======
+table {
+  margin-top: 1rem;
+  width: 100%;
+  th,
+  td {
+    vertical-align: middle;
+    text-align: center;
+    p {
+      margin-bottom: 0;
+    }
+  }
+}
+>>>>>>> develop
 </style>
