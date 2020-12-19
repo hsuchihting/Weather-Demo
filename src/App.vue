@@ -2,13 +2,13 @@
   <div id="app">
     <div id="nav">
       <b-button-group class="buttonGroup">
-        <b-button>
+        <b-button variant="success">
           <router-link to="/about">一週天氣預報</router-link>
         </b-button>
-        <b-button>
+        <b-button variant="success">
           <router-link to="/about2">縣市預報</router-link>
         </b-button>
-        <b-button>
+        <b-button variant="success">
           <router-link to="/about3">鄉鎮天氣預報</router-link>
         </b-button>
       </b-button-group>

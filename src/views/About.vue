@@ -6,7 +6,11 @@
           <div class="text">
             <h2 class="title">{{ getSubject }}</h2>
             <p class="time">有效時間: {{ getTimeNow }} ~ {{ setLastDate }}</p>
-            <button type="button" class="btn btn-primary" @click="ffff = !ffff">
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="fahrenheit = !fahrenheit"
+            >
               °C <i class="fas fa-exchange-alt"></i> ℉
             </button>
           </div>
@@ -37,7 +41,6 @@
                       <tr class="day">
                         <th scope="col" class="table-primary" rowspan="3">
                           {{ item.locationName }}
-                          {{ item.weatherDay.length }}
                         </th>
                         <td class="table-primary">
                           <span>早上</span>
@@ -47,8 +50,8 @@
                           :key="index"
                         >
                           <span>{{ item2.status }}</span>
-                          <p v-if="ffff">{{ item2.fahrenheit }}</p>
-                          <p v-else>{{ item2.cccc }}</p>
+                          <p v-if="fahrenheit">{{ item2.fahrenheit }}</p>
+                          <p v-else>{{ item2.celsius }}</p>
                         </td>
                       </tr>
                       <tr class="night">
@@ -58,8 +61,8 @@
                           :key="index"
                         >
                           <span>{{ item2.status }}</span>
-                          <p v-if="ffff">{{ item2.fahrenheit }}</p>
-                          <p v-else>{{ item2.cccc }}</p>
+                          <p v-if="fahrenheit">{{ item2.fahrenheit }}</p>
+                          <p v-else>{{ item2.celsius }}</p>
                         </td>
                       </tr>
                       <tr class="average">
@@ -69,8 +72,8 @@
                           :key="index"
                         >
                           <span>{{ item2.status }}</span>
-                          <p v-if="ffff">{{ item2.fahrenheit }}</p>
-                          <p v-else>{{ item2.cccc }}</p>
+                          <p v-if="fahrenheit">{{ item2.fahrenheit }}</p>
+                          <p v-else>{{ item2.celsius }}</p>
                         </td>
                       </tr>
                     </tbody>
@@ -1186,46 +1189,10 @@ export default {
       timeNow: "",
       timeAfterWeenk: "",
       Celsius: 0,
-      ffff: true,
+      fahrenheit: true,
       area: [["台北市", "桃園市", "新北市"], ["台中"]],
       range: -1,
-      daylist: [
-        {
-          date: "12/19",
-          week: "saturday",
-          holiday: true,
-        },
-        {
-          date: "12/20",
-          week: "saturday",
-          holiday: true,
-        },
-        {
-          date: "12/21",
-          week: "saturday",
-          holiday: true,
-        },
-        {
-          date: "12/22",
-          week: "saturday",
-          holiday: false,
-        },
-        {
-          date: "12/23",
-          week: "saturday",
-          holiday: false,
-        },
-        {
-          date: "12/24",
-          week: "saturday",
-          holiday: false,
-        },
-        {
-          date: "12/25",
-          week: "saturday",
-          holiday: false,
-        },
-      ],
+      daylist: [],
       cities: [],
     };
   },
@@ -1243,9 +1210,7 @@ export default {
       return time;
     },
     setLastDate() {
-      let time = moment()
-        .add(6, "days")
-        .format("L hh:mm:ss");
+      let time = moment().add(6, "days").format("L hh:mm:ss");
       return time;
     },
     getLocation() {
@@ -1345,17 +1310,17 @@ export default {
           weatherDay.push({
             status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
             fahrenheit: dayTItem ? dayTItem.elementValue[0].value : "",
-            cccc: "16",
+            celsius: "16",
           });
           weatherNight.push({
             status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
             fahrenheit: dayTItem ? dayTItem.elementValue[0].value : "",
-            cccc: "16",
+            celsius: "16",
           });
           weatherAvg.push({
             status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
             fahrenheit: dayTItem ? dayTItem.elementValue[0].value : "",
-            cccc: "16",
+            celsius: "16",
           });
         });
         this.cities.push({
@@ -1375,9 +1340,9 @@ export default {
         case 3:
           return "星期三";
         case 4:
-          return "星期一";
+          return "星期四";
         case 5:
-          return "星期一";
+          return "星期五";
         case 6:
           return "星期六";
         case 7:
@@ -1385,17 +1350,6 @@ export default {
         default:
           return "";
       }
-    },
-    changeTemperature() {
-      alert("溫度單位轉換");
-      // celsius:{
-      // 	get(){
-      // 	return (5 / 9) * (fahrenheit - 32);
-      // 	},
-      // 		set(val){
-      // 	return (9/5) * (val + 32);
-      // 	}
-      // }
     },
     getHumanDate(date) {
       return moment(date, "YYYY-MM-DD").format("DD/MM/YYYY");
@@ -1445,6 +1399,7 @@ table {
   }
 }
 .holiday {
-  background-color: red;
+  background-color: #f4511e;
+  color: #fff;
 }
 </style>
