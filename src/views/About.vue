@@ -38,9 +38,11 @@
                         <th scope="col">星期五</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody v-for="(item, index) in getLocation" :key="index" >
                       <tr class="day">
-                        <th class="table-primary" rowspan="3">連江縣</th>
+                        <th scope="col" class="table-primary" rowspan="3">
+                          {{ item.locationName }}
+                        </th>
                         <td class="table-primary">
                           <span>早上</span>
                         </td>
@@ -104,41 +106,11 @@
                           <p>16 - 18 度</p>
                         </td>
                       </tr>
-                      <tr class="average">
-                        <td class="table-primary">平均溫度</td>
-                        <td>
+                      <tr class="average" >
+                        <td class="table-primary" >平均溫度</td>
+                        <td >
                           <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                      </tr>
-                      <tr class="day">
-                        <th rowspan="3">台北市</th>
-                        <td>
-                          <span>早上</span>
+                          <p >{{item.value}} 度</p>
                         </td>
                         <td>
                           <span>陰有雨</span>
@@ -163,72 +135,6 @@
                         <td>
                           <span>陰有雨</span>
                           <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="night">
-                        <td>晚上</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="average">
-                        <td>平均溫度</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
                         </td>
                       </tr>
                     </tbody>
@@ -1324,7 +1230,6 @@
           </section>
 
           <!-- table -->
-          <section></section>
         </div>
       </div>
     </div>
@@ -1333,7 +1238,7 @@
 
 <script>
 let weather =
-  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45&locationName=%E6%BE%8E%E6%B9%96%E7%B8%A3,%E9%87%91%E9%96%80%E7%B8%A3,%E9%80%A3%E6%B1%9F%E7%B8%A3,%E8%87%BA%E5%8C%97%E5%B8%82,%E6%96%B0%E5%8C%97%E5%B8%82,%E6%A1%83%E5%9C%92%E5%B8%82,%E8%87%BA%E4%B8%AD%E5%B8%82,%E8%87%BA%E5%8D%97%E5%B8%82,%E9%AB%98%E9%9B%84%E5%B8%82,%E6%96%B0%E7%AB%B9%E5%B8%82&elementName=MinT,MaxT,T,RH";
+  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45&locationName=%E8%8A%B1%E8%93%AE%E7%B8%A3,%E9%87%91%E9%96%80%E7%B8%A3,%E8%87%BA%E5%8C%97%E5%B8%82,%E6%96%B0%E5%8C%97%E5%B8%82,%E8%87%BA%E4%B8%AD%E5%B8%82,%E8%87%BA%E5%8D%97%E5%B8%82,%E9%AB%98%E9%9B%84%E5%B8%82&elementName=MinT,MaxT,T,Wx";
 
 import moment from "moment";
 export default {
@@ -1370,15 +1275,17 @@ export default {
         return (couty = item.location);
       }
     },
+    getHighTemp() {},
+    getLowTemp() {},
     getAvgWeather() {
       let temperature = [];
       for (const item of this.weatherItems) {
-        for (const couty of item.location) {
-          for (const weatherEl of couty.weatherElement) {
-            for (const time of weatherEl.time) {
-              console.log(time);
-              // return (temperature = time.elementValue);
-              return (temperature = time);
+        for (const location of item.location) {
+          for (let weatherEl of location.weatherElement) {
+            for (let time of weatherEl.time) {
+              for (let elementVal of time.elementValue) {
+                console.log(elementVal);
+              }
             }
           }
         }

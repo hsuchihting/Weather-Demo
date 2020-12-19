@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-sm-4 col-md-3">
           <div class="card">
-            <div class="card-body">
+            <div class="card-body" v-b-modal.modal-1>
               <h3 class="card-title">台北市</h3>
               <img src="../assets/sun.svg" alt="weatherIcon" />
               <p>多雲時晴</p>
@@ -39,7 +39,7 @@
         </div>
 
         <div class="col-sm-4 col-md-3">
-          <div class="card" v-b-modal.modal-1>
+          <div class="card">
             <div class="card-body">
               <h3 class="card-title">台中市</h3>
               <img src="../assets/sun.svg" alt="weatherIcon" />
@@ -53,8 +53,18 @@
     </div>
     <!-- <b-button v-b-modal.modal-1>Launch demo modal</b-button> -->
 
-    <b-modal id="modal-1" title="BootstrapVue">
-      <p class="my-4">Hello from modal!</p>
+    <b-modal id="modal-1" title="城市名稱">
+      <p class="my-4">天氣現象:</p>
+      <p class="my-4">12小時降雨機率:</p>
+      <p class="my-4">體感溫度:</p>
+      <p class="my-4">最大風速:</p>
+      <p class="my-4">平均溫度:</p>
+      <p class="my-4">平均相對溼度:</p>
+      <p class="my-4">更多其他資料:</p>
+      <p class="my-4">更多其他資料:</p>
+      <p class="my-4">更多其他資料:</p>
+      <p class="my-4">更多其他資料:</p>
+      <p class="my-4">更多其他資料:</p>
     </b-modal>
   </div>
 </template>
