@@ -17,1167 +17,94 @@
 
           <!-- nav-tab -->
           <section>
-            <b-tabs content-class="mt-3" fill>
-              <b-tab title="全臺" active>
-                <div class="table-responsive">
-                  <table class="table table-hover table-bordered" id="taiwan">
-                    <thead class="table-primary sticky-top">
-                      <tr>
-                        <th scope="col">縣市</th>
-                        <th scope="col">時間</th>
-                        <th
-                          scope="col"
-                          v-for="(item, index) in daylist"
-                          :key="index"
-                          :class="{ holiday: item.holiday }"
-                        >
-                          <span>{{ item.date }}</span>
-                          <br />
-                          <span>{{ item.week }}</span>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody v-for="(item, index) in cities" :key="index">
-                      <!-- 白天 -->
-                      <tr class="day">
-                        <th scope="col" class="table-primary" rowspan="3">
-                          {{ item.locationName }}
-                        </th>
-                        <td class="table-primary">
-                          <span>早上</span>
-                        </td>
-                        <td
-                          v-for="(item2, index) in item.weatherDay"
-                          :key="index"
-                        >
-                          <span>{{ item2.status }}</span>
-                          <p v-if="celsius">
-                            {{ item2.minCelsius }} - {{ item2.maxCelsius }} °C
-                          </p>
-                          <p v-else>
-                            {{ item2.minFahrenheit }} -
-                            {{ item2.maxFahrenheit }} ℉
-                          </p>
-                        </td>
-                      </tr>
-                      <!-- 晚上 -->
-                      <tr class="night">
-                        <td class="table-primary">晚上</td>
-                        <td
-                          v-for="(item2, index) in item.weatherNight"
-                          :key="index"
-                        >
-                          <span>{{ item2.status }}</span>
-                          <p v-if="celsius">
-                            {{ item2.celsius }} - {{ item2.celsius }} °C
-                          </p>
-                          <p v-else>
-                            {{ item2.fahrenheit }} - {{ item2.fahrenheit }} ℉
-                          </p>
-                        </td>
-                      </tr>
-                      <!-- 均溫 -->
-                      <tr class="average">
-                        <td class="table-primary">全天溫度</td>
-                        <td
-                          v-for="(item2, index) in item.weatherAvg"
-                          :key="index"
-                        >
-                          <span>{{ item2.status }}</span>
-                          <p v-if="celsius">{{ item2.celsius }} °C</p>
-                          <p v-else>{{ item2.fahrenheit }} ℉</p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </b-tab>
-              <b-tab title="北部">
-                <div class="table-responsive">
-                  <table class="table table-hover table-bordered" id="taiwan">
-                    <thead class="table-success">
-                      <tr>
-                        <th scope="col">縣市</th>
-                        <th scope="col">時間</th>
-                        <th scope="col">
-                          <span>12/19</span>
-                          <br />
-                          <span>星期六</span>
-                        </th>
-                        <th scope="col">星期天</th>
-                        <th scope="col">星期一</th>
-                        <th scope="col">星期二</th>
-                        <th scope="col">星期三</th>
-                        <th scope="col">星期四</th>
-                        <th scope="col">星期五</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="day">
-                        <th class="table-success" rowspan="3">台南市</th>
-                        <td class="table-success">
-                          <span>早上</span>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="night">
-                        <td class="table-success">晚上</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="average">
-                        <td class="table-success">平均溫度</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                      </tr>
-                      <tr class="day">
-                        <th rowspan="3">新北市</th>
-                        <td>
-                          <span>早上</span>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="night">
-                        <td>晚上</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="average">
-                        <td>平均溫度</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </b-tab>
-              <b-tab title="中部">
-                <div class="table-responsive">
-                  <table class="table table-hover table-bordered" id="taiwan">
-                    <thead class="table-warning sticky-top">
-                      <tr>
-                        <th scope="col">縣市</th>
-                        <th scope="col">時間</th>
-                        <th scope="col">
-                          <span>12/19</span>
-                          <br />
-                          <span>星期六</span>
-                        </th>
-                        <th scope="col">星期天</th>
-                        <th scope="col">星期一</th>
-                        <th scope="col">星期二</th>
-                        <th scope="col">星期三</th>
-                        <th scope="col">星期四</th>
-                        <th scope="col">星期五</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="day">
-                        <th class="table-warning" rowspan="3">台南市</th>
-                        <td class="table-warning">
-                          <span>早上</span>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="night">
-                        <td class="table-warning">晚上</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="average">
-                        <td class="table-warning">平均溫度</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                      </tr>
-                      <tr class="day">
-                        <th rowspan="3">新北市</th>
-                        <td>
-                          <span>早上</span>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="night">
-                        <td>晚上</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="average">
-                        <td>平均溫度</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </b-tab>
-              <b-tab title="南部">
-                <div class="table-responsive">
-                  <table class="table table-hover table-bordered" id="taiwan">
-                    <thead class="table-info sticky-top">
-                      <tr>
-                        <th scope="col">縣市</th>
-                        <th scope="col">時間</th>
-                        <th scope="col">
-                          <span>12/19</span>
-                          <br />
-                          <span>星期六</span>
-                        </th>
-                        <th scope="col">星期天</th>
-                        <th scope="col">星期一</th>
-                        <th scope="col">星期二</th>
-                        <th scope="col">星期三</th>
-                        <th scope="col">星期四</th>
-                        <th scope="col">星期五</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="day">
-                        <th class="table-info" rowspan="3">台南市</th>
-                        <td class="table-info">
-                          <span>早上</span>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="night">
-                        <td class="table-info">晚上</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="average">
-                        <td class="table-info">平均溫度</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                      </tr>
-                      <tr class="day">
-                        <th rowspan="3">新北市</th>
-                        <td>
-                          <span>早上</span>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="night">
-                        <td>晚上</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="average">
-                        <td>平均溫度</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </b-tab>
-              <b-tab title="東部">
-                <div class="table-responsive">
-                  <table class="table table-hover table-bordered" id="taiwan">
-                    <thead class="table-danger sticky-top">
-                      <tr>
-                        <th scope="col">縣市</th>
-                        <th scope="col">時間</th>
-                        <th scope="col">
-                          <span>12/19</span>
-                          <br />
-                          <span>星期六</span>
-                        </th>
-                        <th scope="col">星期天</th>
-                        <th scope="col">星期一</th>
-                        <th scope="col">星期二</th>
-                        <th scope="col">星期三</th>
-                        <th scope="col">星期四</th>
-                        <th scope="col">星期五</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="day">
-                        <th class="table-danger" rowspan="3">台南市</th>
-                        <td class="table-danger">
-                          <span>早上</span>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="night">
-                        <td class="table-danger">晚上</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="average">
-                        <td class="table-danger">平均溫度</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                      </tr>
-                      <tr class="day">
-                        <th rowspan="3">新北市</th>
-                        <td>
-                          <span>早上</span>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="night">
-                        <td>晚上</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="average">
-                        <td>平均溫度</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </b-tab>
-              <b-tab title="外島">
-                <div class="table-responsive">
-                  <table class="table table-hover table-bordered" id="taiwan">
-                    <thead class="table-secondary sticky-top">
-                      <tr>
-                        <th scope="col">縣市</th>
-                        <th scope="col">時間</th>
-                        <th scope="col">
-                          <span>12/19</span>
-                          <br />
-                          <span>星期六</span>
-                        </th>
-                        <th scope="col">星期天</th>
-                        <th scope="col">星期一</th>
-                        <th scope="col">星期二</th>
-                        <th scope="col">星期三</th>
-                        <th scope="col">星期四</th>
-                        <th scope="col">星期五</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="day">
-                        <th class="table-secondary" rowspan="3">台南市</th>
-                        <td class="table-secondary">
-                          <span>早上</span>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="night">
-                        <td class="table-secondary">晚上</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="average">
-                        <td class="table-secondary">平均溫度</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                      </tr>
-                      <tr class="day">
-                        <th rowspan="3">新北市</th>
-                        <td>
-                          <span>早上</span>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="night">
-                        <td>晚上</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>16 - 18 度</p>
-                        </td>
-                      </tr>
-                      <tr class="average">
-                        <td>平均溫度</td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                        <td>
-                          <span>陰有雨</span>
-                          <p>10 度</p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </b-tab>
-            </b-tabs>
+            <nav class="nav nav-pills nav-fill">
+              <a class="nav-item nav-link" href="#" @click.prevent="getArea(-1)"
+                >全臺</a
+              >
+              <a class="nav-item nav-link" href="#" @click.prevent="getArea(0)"
+                >北部</a
+              >
+              <a class="nav-item nav-link" href="#" @click.prevent="getArea(1)"
+                >中部</a
+              >
+              <a class="nav-item nav-link" href="#" @click.prevent="getArea(2)"
+                >南部</a
+              >
+              <a class="nav-item nav-link" href="#" @click.prevent="getArea(3)"
+                >東部</a
+              >
+              <a class="nav-item nav-link" href="#" @click.prevent="getArea(4)"
+                >外島</a
+              >
+            </nav>
+          </section>
+
+          <section>
+            <div class="table-responsive">
+              <table class="table table-hover table-bordered" id="taiwan">
+                <thead class="table-primary sticky-top">
+                  <tr>
+                    <th scope="col">縣市</th>
+                    <th scope="col">時間</th>
+                    <th
+                      scope="col"
+                      v-for="(item, index) in daylist"
+                      :key="index"
+                      :class="{ holiday: item.holiday }"
+                    >
+                      <span>{{ item.date }}</span>
+                      <br />
+                      <span>{{ item.week }}</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody v-for="(item, index) in cities" :key="index">
+                  <!-- 白天 -->
+                  <tr class="day">
+                    <th scope="col" class="table-primary" rowspan="3">
+                      {{ item.locationName }}
+                    </th>
+                    <td class="table-primary">
+                      <span>早上</span>
+                    </td>
+                    <td v-for="(item2, index) in item.weatherDay" :key="index">
+                      <span>{{ item2.status }}</span>
+                      <p v-if="celsius">
+                        {{ item2.minCelsius }} - {{ item2.maxCelsius }} °C
+                      </p>
+                      <p v-else>
+                        {{ item2.minFahrenheit }} - {{ item2.maxFahrenheit }} ℉
+                      </p>
+                    </td>
+                  </tr>
+                  <!-- 晚上 -->
+                  <tr class="night">
+                    <td class="table-primary">晚上</td>
+                    <td
+                      v-for="(item2, index) in item.weatherNight"
+                      :key="index"
+                    >
+                      <span>{{ item2.status }}</span>
+                      <p v-if="celsius">
+                        {{ item2.celsius }} - {{ item2.celsius }} °C
+                      </p>
+                      <p v-else>
+                        {{ item2.fahrenheit }} - {{ item2.fahrenheit }} ℉
+                      </p>
+                    </td>
+                  </tr>
+                  <!-- 均溫 -->
+                  <tr class="average">
+                    <td class="table-primary">全天溫度</td>
+                    <td v-for="(item2, index) in item.weatherAvg" :key="index">
+                      <span>{{ item2.status }}</span>
+                      <p v-if="celsius">{{ item2.celsius }} °C</p>
+                      <p v-else>{{ item2.fahrenheit }} ℉</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </section>
         </div>
       </div>
@@ -1209,6 +136,7 @@ export default {
       range: -1,
       daylist: [],
       cities: [],
+      active: false,
     };
   },
 
@@ -1248,6 +176,7 @@ export default {
     },
     getArea(k) {
       this.range = k;
+      this.active = !this.active;
       this.getData();
     },
     getData() {
@@ -1295,7 +224,6 @@ export default {
               dayTtime.startTime === date + " 06:00:00" ||
               dayTtime.startTime === date + " 12:00:00"
           );
-         
           //最高溫
           let maxTItem = maxT.find(
             (dayTtime) =>
@@ -1323,19 +251,19 @@ export default {
             //最高攝氏
             maxCelsius: maxTItem ? maxTItem.elementValue[0].value : "",
             //最低華氏
-            minFahrenheit: ((this.minCelsius + 32)*1.8).toFixed(0),
+            minFahrenheit: ((this.minCelsius + 32) * 1.8).toFixed(0),
             //最高華氏
-            maxFahrenheit: ((this.maxCelsius + 32)*1.8).toFixed(0),
+            maxFahrenheit: ((this.maxCelsius + 32) * 1.8).toFixed(0),
           });
           weatherNight.push({
             status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
             celsius: dayTItem ? dayTItem.elementValue[0].value : "",
-            fahrenheit: ((this.celsius + 32)*1.8).toFixed(0),
+            fahrenheit: ((this.celsius + 32) * 1.8).toFixed(0),
           });
           weatherAvg.push({
             status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
             celsius: dayTItem ? dayTItem.elementValue[0].value : "",
-            fahrenheit: ((this.celsius + 32)*1.8).toFixed(0)
+            fahrenheit: ((this.celsius + 32) * 1.8).toFixed(0),
           });
         });
 
@@ -1416,5 +344,15 @@ table {
 .holiday {
   background-color: #f4511e;
   color: #fff;
+}
+.nav-item {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  color: #333;
+  transition: all 0.2s;
+  &:hover {
+    background-color: #f4511e;
+    color: #fff;
+  }
 }
 </style>
