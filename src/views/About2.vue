@@ -7,14 +7,13 @@
           <div class="select">
             <label>
               <p>選擇縣市</p>
-              <select v-model="selectedCiry">
-                <option value="null" disabled>--請選擇縣市--</option>
+              <select v-model="selectedCity" @change="getData">
                 <option
-                  value="1"
+                  :value="city"
                   v-for="(city, index) in getCityName"
                   :key="index"
                 >
-                  {{ city.locationName }}
+                  {{ city }}
                 </option>
               </select>
             </label>
@@ -28,11 +27,13 @@
               <div class="col-sm-4">
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">今日凌晨</h5>
-                    <img src="../assets/sun.svg" alt="weatherIcon" />
-                    <p>17-18 度</p>
-                    <p>降雨機率: 90%</p>
-                    <p>稍有寒意</p>
+                    <h5 class="card-title">今晚明晨</h5>
+                    <p>{{ tomorrow[0].status }}</p>
+                    <p>
+                      {{ tomorrow[0].minCelsius }}-{{ tomorrow[0].maxCelsius }}
+                      度
+                    </p>
+                    <p>降雨機率: {{ tomorrow[0].rain }}%</p>
                   </div>
                 </div>
               </div>
@@ -40,11 +41,13 @@
               <div class="col-sm-4">
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">今日凌晨</h5>
-                    <img src="../assets/sun.svg" alt="weatherIcon" />
-                    <p>17-18 度</p>
-                    <p>降雨機率: 90%</p>
-                    <p>稍有寒意</p>
+                    <h5 class="card-title">明日白天</h5>
+                    <p>{{ tomorrow[1].status }}</p>
+                    <p>
+                      {{ tomorrow[1].minCelsius }}-{{ tomorrow[1].maxCelsius }}
+                      度
+                    </p>
+                    <p>降雨機率: {{ tomorrow[1].rain }}%</p>
                   </div>
                 </div>
               </div>
@@ -52,11 +55,13 @@
               <div class="col-sm-4">
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">今日凌晨</h5>
-                    <img src="../assets/sun.svg" alt="weatherIcon" />
-                    <p>17-18 度</p>
-                    <p>降雨機率: 90%</p>
-                    <p>稍有寒意</p>
+                    <h5 class="card-title">明日晚上</h5>
+                    <p>{{ tomorrow[2].status }}</p>
+                    <p>
+                      {{ tomorrow[2].minCelsius }}-{{ tomorrow[2].maxCelsius }}
+                      度
+                    </p>
+                    <p>降雨機率: {{ tomorrow[2].rain }}%</p>
                   </div>
                 </div>
               </div>
@@ -213,12 +218,13 @@
   </div>
 </template>
 
-
 <script>
 let nomal36h =
   "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45&locationName=%E8%8A%B1%E8%93%AE%E7%B8%A3,%E9%87%91%E9%96%80%E7%B8%A3,%E8%87%BA%E5%8C%97%E5%B8%82,%E6%96%B0%E5%8C%97%E5%B8%82,%E8%87%BA%E4%B8%AD%E5%B8%82,%E8%87%BA%E5%8D%97%E5%B8%82,%E9%AB%98%E9%9B%84%E5%B8%82&elementName=Wx,PoP,MinT,MaxT";
 
-let taiwanWeek = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45&locationName=%E8%8A%B1%E8%93%AE%E7%B8%A3,%E6%BE%8E%E6%B9%96%E7%B8%A3,%E9%87%91%E9%96%80%E7%B8%A3,%E8%87%BA%E5%8C%97%E5%B8%82,%E6%96%B0%E5%8C%97%E5%B8%82,%E6%A1%83%E5%9C%92%E5%B8%82,%E8%87%BA%E4%B8%AD%E5%B8%82,%E8%87%BA%E5%8D%97%E5%B8%82,%E9%AB%98%E9%9B%84%E5%B8%82&elementName=MinT,MaxT,PoP12h";
+let taiwanWeek =
+  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45&locationName=%E8%8A%B1%E8%93%AE%E7%B8%A3,%E6%BE%8E%E6%B9%96%E7%B8%A3,%E9%87%91%E9%96%80%E7%B8%A3,%E8%87%BA%E5%8C%97%E5%B8%82,%E6%96%B0%E5%8C%97%E5%B8%82,%E6%A1%83%E5%9C%92%E5%B8%82,%E8%87%BA%E4%B8%AD%E5%B8%82,%E8%87%BA%E5%8D%97%E5%B8%82,%E9%AB%98%E9%9B%84%E5%B8%82&elementName=MinT,MaxT,PoP12h";
+import moment from "moment";
 
 import VueApexCharts from "vue-apexcharts";
 export default {
@@ -240,7 +246,9 @@ export default {
         },
       ],
       weatherItems: [],
-      selectedCiry: null,
+      selectedCity: "臺北市",
+      getCityName: ["臺北市", "新北市"],
+      tomorrow: [],
     };
   },
   computed: {
@@ -248,13 +256,6 @@ export default {
       let subjectTitle = null;
       subjectTitle = this.weatherItems.datasetDescription;
       return subjectTitle;
-    },
-    getCityName() {
-      let cityName = [];
-      for (const city of this.weatherItems) {
-        return (cityName = city.location);
-        console.log(cityName);
-      }
     },
   },
   created() {
@@ -278,6 +279,55 @@ export default {
       this.$http.get(nomal36h).then((res) => {
         this.weatherItems = res.data.records;
         console.log(this.weatherItems);
+        this.getData();
+      });
+    },
+    getData() {
+      this.tomorrow = [];
+      this.getData2(' 06:00:00',1);
+      this.getData2(' 18:00:00',1);
+      this.getData2(' 06:00:00',2);
+
+    },
+    getData2(ff,d) {
+      let locations = this.weatherItems.location;
+
+      let item = locations.find(
+        (item) => item.locationName === this.selectedCity
+      );
+      console.log(item);
+      let weatherDec = item.weatherElement[0].time;
+      let minT = item.weatherElement[2].time;
+      let maxT = item.weatherElement[3].time;
+      let rain = item.weatherElement[1].time;
+      let date = moment()
+        .add(d, "days")
+        .format("YYYY-MM-DD");
+      let maxTItem = maxT.find(
+        (dayTtime) => dayTtime.endTime === date + ff
+      );
+
+      //最低溫
+      let minTItem = minT.find(
+        (dayTtime) => dayTtime.endTime === date + ff
+      );
+      //天氣說明
+      let weatherDecItem = weatherDec.find(
+        (dayTtime) => dayTtime.endTime === date + ff
+      );
+      let rainItem = rain.find(
+        (dayTtime) => dayTtime.endTime === date + ff
+      );
+
+      let minCelsius = minTItem ? Number(minTItem.parameter.parameterName) : "";
+      let maxCelsius = maxTItem ? Number(maxTItem.parameter.parameterName) : "";
+      this.tomorrow.push({
+        status: weatherDecItem ? weatherDecItem.parameter.parameterName : "",
+        //最低攝氏
+        minCelsius: minCelsius,
+        //最高攝氏
+        maxCelsius: maxCelsius,
+        rain: rainItem ? rainItem.parameter.parameterName : "",
       });
     },
   },

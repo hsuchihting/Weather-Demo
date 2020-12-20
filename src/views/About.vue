@@ -86,10 +86,10 @@
                     >
                       <span>{{ item2.status }}</span>
                       <p v-if="celsius">
-                        {{ item2.celsius }} - {{ item2.celsius }} °C
+                        {{ item2.minCelsius }} - {{ item2.maxCelsius }} °C
                       </p>
                       <p v-else>
-                        {{ item2.fahrenheit }} - {{ item2.fahrenheit }} ℉
+                        {{ item2.minFahrenheit }} - {{ item2.maxFahrenheit }} ℉
                       </p>
                     </td>
                   </tr>
@@ -98,8 +98,12 @@
                     <td class="table-primary">全天溫度</td>
                     <td v-for="(item2, index) in item.weatherAvg" :key="index">
                       <span>{{ item2.status }}</span>
-                      <p v-if="celsius">{{ item2.celsius }} °C</p>
-                      <p v-else>{{ item2.fahrenheit }} ℉</p>
+                      <p v-if="celsius">
+                        {{ item2.minCelsius }} - {{ item2.maxCelsius }} °C
+                      </p>
+                      <p v-else>
+                        {{ item2.minFahrenheit }} - {{ item2.maxFahrenheit }} ℉
+                      </p>
                     </td>
                   </tr>
                 </tbody>
@@ -153,7 +157,9 @@ export default {
       return time;
     },
     setLastDate() {
-      let time = moment().add(6, "days").format("L hh:mm:ss");
+      let time = moment()
+        .add(6, "days")
+        .format("L hh:mm:ss");
       return time;
     },
     getLocation() {
@@ -176,7 +182,6 @@ export default {
     },
     getArea(k) {
       this.range = k;
-      this.active = !this.active;
       this.getData();
     },
     getData() {
@@ -196,18 +201,20 @@ export default {
       this.cities = [];
       let locations = this.weatherItems[0].location;
       let location2 = [];
+      console.log(this.range);
       if (this.range != -1) {
         let assignArea = this.area[this.range];
-        location2 = location.filter(
+        location2 = locations.filter(
           (element) => assignArea.indexOf(element.locationName) >= 0
         );
+        console.log(location2);
       } else {
         location2 = locations;
       }
 
       //取得縣市溫度資料
       location2.forEach((item) => {
-        console.log(item);
+        //console.log(item);
         let weatherDay = [];
         let weatherNight = [];
         let weatherAvg = [];
@@ -243,27 +250,103 @@ export default {
               dayTtime.startTime === date + " 06:00:00" ||
               dayTtime.startTime === date + " 12:00:00"
           );
+          //晚上
+          let nightMaxTItem = maxT.find(
+            (dayTtime) =>
+              dayTtime.startTime === date + " 18:00:00" ||
+              dayTtime.startTime === date + " 00:00:00"
+          );
+
+          //最低溫
+          let nightMinTItem = minT.find(
+            (dayTtime) =>
+              dayTtime.startTime === date + " 18:00:00" ||
+              dayTtime.startTime === moment(date).add(1, 'days').format("YYYY-MM-DD") + " 00:00:00"
+          );
+          //天氣說明
+          let weatherNightDecItem = weatherDec.find(
+            (dayTtime) =>
+              dayTtime.startTime === date + " 18:00:00" ||
+              dayTtime.startTime === moment(date).add(1, 'days').format("YYYY-MM-DD") + " 00:00:00"
+          );
+
+          let minCelsius = minTItem
+            ? Number(minTItem.elementValue[0].value)
+            : "";
+          let maxCelsius = maxTItem
+            ? Number(maxTItem.elementValue[0].value)
+            : "";
+          let minCelsius2 = nightMinTItem
+            ? Number(nightMinTItem.elementValue[0].value)
+            : "";
+          let maxCelsius2 = nightMaxTItem
+            ? Number(nightMaxTItem.elementValue[0].value)
+            : "";
+          let avgMinCelsius = "";
+          if (minCelsius != "" && minCelsius2 != "") {
+            avgMinCelsius = Math.min(minCelsius, minCelsius2);
+          }
+
+          let avgMaxCelsius = "";
+          if (maxCelsius != "" && maxCelsius2 != "") {
+            avgMaxCelsius = Math.max(maxCelsius, maxCelsius2);
+          }
           weatherDay.push({
             //天氣概況
             status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
             //最低攝氏
-            minCelsius: minTItem ? minTItem.elementValue[0].value : "",
+            minCelsius: minCelsius,
             //最高攝氏
-            maxCelsius: maxTItem ? maxTItem.elementValue[0].value : "",
+            maxCelsius: maxCelsius,
             //最低華氏
-            minFahrenheit: ((this.minCelsius + 32) * 1.8).toFixed(0),
+            minFahrenheit: minTItem
+              ? (Number(minTItem.elementValue[0].value) + 32) * (1.8).toFixed(0)
+              : "",
             //最高華氏
-            maxFahrenheit: ((this.maxCelsius + 32) * 1.8).toFixed(0),
+            maxFahrenheit: maxTItem
+              ? (Number(maxTItem.elementValue[0].value) + 32) * (1.8).toFixed(0)
+              : "",
           });
           weatherNight.push({
-            status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
-            celsius: dayTItem ? dayTItem.elementValue[0].value : "",
-            fahrenheit: ((this.celsius + 32) * 1.8).toFixed(0),
+            //天氣概況
+            status: weatherNightDecItem
+              ? weatherNightDecItem.elementValue[0].value
+              : "",
+            //最低攝氏
+            minCelsius: minCelsius2,
+            //最高攝氏
+            maxCelsius: maxCelsius2,
+            //最低華氏
+            minFahrenheit: nightMinTItem
+              ? (Number(nightMinTItem.elementValue[0].value) + 32) *
+                (1.8).toFixed(0)
+              : "",
+            //最高華氏
+            maxFahrenheit: nightMaxTItem
+              ? (Number(nightMaxTItem.elementValue[0].value) + 32) *
+                (1.8).toFixed(0)
+              : "",
           });
+          //全天均溫
           weatherAvg.push({
-            status: weatherDecItem ? weatherDecItem.elementValue[0].value : "",
-            celsius: dayTItem ? dayTItem.elementValue[0].value : "",
-            fahrenheit: ((this.celsius + 32) * 1.8).toFixed(0),
+            //天氣概況
+            status: weatherNightDecItem
+              ? weatherNightDecItem.elementValue[0].value
+              : "",
+            //最低攝氏
+            minCelsius: avgMinCelsius,
+            //最高攝氏
+            maxCelsius: avgMaxCelsius,
+            //最低華氏
+            minFahrenheit:
+              avgMinCelsius != ""
+                ? (avgMinCelsius + 32) * (1.8).toFixed(0)
+                : "",
+            //最高華氏
+            maxFahrenheit:
+              avgMaxCelsius != ""
+                ? (avgMaxCelsius + 32) * (1.8).toFixed(0)
+                : "",
           });
         });
 
