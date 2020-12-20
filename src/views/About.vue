@@ -18,22 +18,46 @@
           <!-- nav-tab -->
           <section>
             <nav class="nav nav-pills nav-fill">
-              <a class="nav-item nav-link" href="#" @click.prevent="getArea(-1)"
+              <a
+                class="nav-item nav-link"
+                :class="{ active: range == -1 }"
+                href="#"
+                @click.prevent="getArea(-1)"
                 >全臺</a
               >
-              <a class="nav-item nav-link" href="#" @click.prevent="getArea(0)"
+              <a
+                class="nav-item nav-link"
+                :class="{ active: range == 0 }"
+                href="#"
+                @click.prevent="getArea(0)"
                 >北部</a
               >
-              <a class="nav-item nav-link" href="#" @click.prevent="getArea(1)"
+              <a
+                class="nav-item nav-link"
+                :class="{ active: range == 1 }"
+                href="#"
+                @click.prevent="getArea(1)"
                 >中部</a
               >
-              <a class="nav-item nav-link" href="#" @click.prevent="getArea(2)"
+              <a
+                class="nav-item nav-link"
+                :class="{ active: range == 2 }"
+                href="#"
+                @click.prevent="getArea(2)"
                 >南部</a
               >
-              <a class="nav-item nav-link" href="#" @click.prevent="getArea(3)"
+              <a
+                class="nav-item nav-link"
+                :class="{ active: range == 3 }"
+                href="#"
+                @click.prevent="getArea(3)"
                 >東部</a
               >
-              <a class="nav-item nav-link" href="#" @click.prevent="getArea(4)"
+              <a
+                class="nav-item nav-link"
+                :class="{ active: range == 4 }"
+                href="#"
+                @click.prevent="getArea(4)"
                 >外島</a
               >
             </nav>
@@ -261,13 +285,21 @@ export default {
           let nightMinTItem = minT.find(
             (dayTtime) =>
               dayTtime.startTime === date + " 18:00:00" ||
-              dayTtime.startTime === moment(date).add(1, 'days').format("YYYY-MM-DD") + " 00:00:00"
+              dayTtime.startTime ===
+                moment(date)
+                  .add(1, "days")
+                  .format("YYYY-MM-DD") +
+                  " 00:00:00"
           );
           //天氣說明
           let weatherNightDecItem = weatherDec.find(
             (dayTtime) =>
               dayTtime.startTime === date + " 18:00:00" ||
-              dayTtime.startTime === moment(date).add(1, 'days').format("YYYY-MM-DD") + " 00:00:00"
+              dayTtime.startTime ===
+                moment(date)
+                  .add(1, "days")
+                  .format("YYYY-MM-DD") +
+                  " 00:00:00"
           );
 
           let minCelsius = minTItem
@@ -433,7 +465,7 @@ table {
   border: 1px solid #ccc;
   color: #333;
   transition: all 0.2s;
-  &:hover {
+  .active {
     background-color: #f4511e;
     color: #fff;
   }
