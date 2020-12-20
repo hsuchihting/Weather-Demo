@@ -181,9 +181,7 @@ export default {
       return time;
     },
     setLastDate() {
-      let time = moment()
-        .add(6, "days")
-        .format("L hh:mm:ss");
+      let time = moment().add(6, "days").format("L hh:mm:ss");
       return time;
     },
     getLocation() {
@@ -286,20 +284,14 @@ export default {
             (dayTtime) =>
               dayTtime.startTime === date + " 18:00:00" ||
               dayTtime.startTime ===
-                moment(date)
-                  .add(1, "days")
-                  .format("YYYY-MM-DD") +
-                  " 00:00:00"
+                moment(date).add(1, "days").format("YYYY-MM-DD") + " 00:00:00"
           );
           //天氣說明
           let weatherNightDecItem = weatherDec.find(
             (dayTtime) =>
               dayTtime.startTime === date + " 18:00:00" ||
               dayTtime.startTime ===
-                moment(date)
-                  .add(1, "days")
-                  .format("YYYY-MM-DD") +
-                  " 00:00:00"
+                moment(date).add(1, "days").format("YYYY-MM-DD") + " 00:00:00"
           );
 
           let minCelsius = minTItem
@@ -381,8 +373,6 @@ export default {
                 : "",
           });
         });
-
-        //?如果加晚上的資料是在這邊新增，然後更換時段就好嗎?
 
         this.cities.push({
           locationName: item.locationName,
