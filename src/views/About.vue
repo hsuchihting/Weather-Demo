@@ -4,15 +4,17 @@
 			<div class="col-12">
 				<div class="card-box">
 					<div class="text">
-						<h2 class="title">{{ getSubject }}</h2>
-						<p class="time">有效時間: {{ getTimeNow }} ~ {{ setLastDate }}</p>
-						<button
-							type="button"
-							class="btn btn-primary"
-							@click="celsius = !celsius"
-						>
-							°C <i class="fas fa-exchange-alt"></i> ℉
-						</button>
+						<h2>一週天氣預報</h2>
+						<div class="content">
+							<p class="time">有效時間: {{ getTimeNow }} ~ {{ setLastDate }}</p>
+							<button
+								type="button"
+								class="btn btn-warning"
+								@click="celsius = !celsius"
+							>
+								°C <i class="fas fa-exchange-alt"></i> ℉
+							</button>
+						</div>
 					</div>
 
 					<!-- nav-tab -->
@@ -72,7 +74,7 @@
 										<th scope="col">時間</th>
 										<th
 											scope="col"
-											v-for="(item, index) in daylist"
+											v-for="(item, index) in dayList"
 											:key="index"
 											:class="{ holiday: item.holiday }"
 										>
@@ -151,7 +153,6 @@ export default {
 		return {
 			weatherItems: [],
 			subject: null,
-			timeAfterWeenk: '',
 			celsius: true,
 			area: [
 				['臺北市', '新北市'],
@@ -161,20 +162,13 @@ export default {
 				['金門縣'],
 			],
 			range: -1,
-			daylist: [],
+			dayList: [],
 			cities: [],
 			active: false,
 		};
 	},
 
 	computed: {
-		getSubject() {
-			let subjectTitle = null;
-			for (let item of this.weatherItems) {
-				subjectTitle = item.datasetDescription;
-			}
-			return subjectTitle;
-		},
 		getTimeNow() {
 			let time = moment().format('L hh:mm:ss');
 			return time;
@@ -209,17 +203,18 @@ export default {
 		},
 		getData() {
 			//取日期
-			this.daylist = [];
+			this.dayList = [];
 			for (let i = 0; i < 7; i++) {
 				let day = moment().add(i, 'days');
 				let week = day.format('E') * 1;
-				this.daylist.push({
+				this.dayList.push({
 					date: day.format('MM/DD'),
 					d: day.format('YYYY-MM-DD'), //驗證用
 					week: this.toWeek(week * 1),
 					holiday: week === 6 || week === 7,
 				});
 			}
+
 			//取城市
 			this.cities = [];
 			let locations = this.weatherItems[0].location;
@@ -231,23 +226,21 @@ export default {
 				location2 = locations.filter(
 					(element) => assignArea.indexOf(element.locationName) >= 0
 				);
-				// console.log(location2);
 			} else {
 				location2 = locations;
 			}
 
 			//取得縣市溫度資料
 			location2.forEach((item) => {
-				//console.log(item);
 				let weatherDay = [];
 				let weatherNight = [];
 				let weatherAvg = [];
 				let dayT = item.weatherElement[0].time;
-				let weatherDec = item.weatherElement[1].time;
+				let weatherDesc = item.weatherElement[1].time;
 				let minT = item.weatherElement[2].time;
 				let maxT = item.weatherElement[3].time;
-
-				this.daylist.forEach((item) => {
+				//對應日期的天氣資訊
+				this.dayList.forEach((item) => {
 					let date = item.d;
 					// 均溫
 					let dayTItem = dayT.find(
@@ -269,7 +262,7 @@ export default {
 							dayTtime.startTime === date + ' 12:00:00'
 					);
 					//天氣說明
-					let weatherDecItem = weatherDec.find(
+					let weatherDescItem = weatherDesc.find(
 						(dayTtime) =>
 							dayTtime.startTime === date + ' 06:00:00' ||
 							dayTtime.startTime === date + ' 12:00:00'
@@ -292,7 +285,7 @@ export default {
 									' 00:00:00'
 					);
 					//天氣說明
-					let weatherNightDecItem = weatherDec.find(
+					let weatherNightDecItem = weatherDesc.find(
 						(dayTtime) =>
 							dayTtime.startTime === date + ' 18:00:00' ||
 							dayTtime.startTime ===
@@ -302,6 +295,7 @@ export default {
 									' 00:00:00'
 					);
 
+					//取得白天最高溫與最低溫
 					let minCelsius = minTItem
 						? Number(minTItem.elementValue[0].value)
 						: '';
@@ -311,6 +305,8 @@ export default {
 					let minCelsius2 = nightMinTItem
 						? Number(nightMinTItem.elementValue[0].value)
 						: '';
+
+					//取得晚上最高溫與最低溫
 					let maxCelsius2 = nightMaxTItem
 						? Number(nightMaxTItem.elementValue[0].value)
 						: '';
@@ -323,9 +319,13 @@ export default {
 					if (maxCelsius != '' && maxCelsius2 != '') {
 						avgMaxCelsius = Math.max(maxCelsius, maxCelsius2);
 					}
+
+					//* 新增白天資料
 					weatherDay.push({
 						//天氣概況
-						status: weatherDecItem ? weatherDecItem.elementValue[0].value : '',
+						status: weatherDescItem
+							? weatherDescItem.elementValue[0].value
+							: '',
 						//最低攝氏
 						minCelsius: minCelsius,
 						//最高攝氏
@@ -339,6 +339,8 @@ export default {
 							? (Number(maxTItem.elementValue[0].value) + 32) * (1.8).toFixed(0)
 							: '',
 					});
+
+					//* 新增晚上資料
 					weatherNight.push({
 						//天氣概況
 						status: weatherNightDecItem
@@ -359,6 +361,7 @@ export default {
 							  (1.8).toFixed(0)
 							: '',
 					});
+
 					//全天均溫
 					weatherAvg.push({
 						//天氣概況
@@ -422,15 +425,14 @@ a {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	.title {
-		font-size: 24px;
-	}
-	.time {
-		font-size: 16px;
-	}
-	.title,
-	.time {
-		margin-bottom: 0;
+	.content {
+		display: flex;
+		align-items: center;
+		.time {
+			font-size: 20px;
+			margin-bottom: 0;
+			padding-right: 2rem;
+		}
 	}
 }
 
