@@ -1,11 +1,13 @@
 <template>
   <div class="container">
     <h2>鄉鎮天氣預報</h2>
+    <!-- select -->
     <section>
       <div class="select">
         <label>
           <p>選擇縣市</p>
           <select v-model="selectedCity" @change="getCity">
+            <option value="null" disabled>-- 請選擇城市 --</option>
             <option
               :value="city"
               v-for="(city, index) in getCityName"
@@ -18,47 +20,63 @@
       </div>
     </section>
 
-    <div class="cards">
-      <div class="row">
-        <div
-          class="col-md-3"
-          v-for="(item, index) in cities"
-          :key="index"
-          @click="showModal(item)"
-          v-b-modal="'statusModal'"
-        >
-          <div class="card">
-            <div class="card-body">
-              <h3 class="card-title">
-                {{ item.locationName }}
-              </h3>
-              <p>{{ item.status }}</p>
-              <p>{{ item.minCelsius }} - {{ item.maxCelsius }} °C</p>
-              <p>{{ item.rain }}</p>
+    <!-- card -->
+    <section>
+      <div class="cards">
+        <div class="row">
+          <div
+            class="col-md-4"
+            v-for="(item, index) in cities"
+            :key="index"
+            @click="showModal(item)"
+            v-b-modal="'statusModal'"
+          >
+            <div class="card">
+              <div class="card-body">
+                <h3 class="card-title">
+                  {{ item.locationName }}
+                </h3>
+                <p>{{ item.status }}</p>
+                <p>溫度：{{ item.minCelsius }} - {{ item.maxCelsius }} °C</p>
+                <p>降雨機率：{{ item.rain }} %</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <b-modal
-      id="statusModal"
-      header-bg-variant="primary"
-      header-close-variant="white"
-    >
-      <template slot="modal-title">
-        <div class="text-white">
-
-        </div>
-		  <ul>
-
-            <li>{{ ddd }}</li>
-          </ul>
-      </template>
-
-      <!-- status modal text -->
-    </b-modal>
-    {{ ddd }}
+    <!-- modal -->
+    <section>
+      <b-modal
+        id="statusModal"
+        header-bg-variant="primary"
+        header-close-variant="white"
+      >
+        <template slot="modal-title">
+          <div class="text-white">
+            {{ detail.cityName }}
+          </div>
+        </template>
+        <ul>
+          <li>天氣現象：{{ detail.Wx }}</li>
+          <li>12 小時降雨機率：{{ detail.PoP12h }} %</li>
+          <li>平均溫度：{{ detail.T }} °C</li>
+          <li>平均相對溼度：{{ detail.RH }} %</li>
+          <li>最小舒適指數：{{ detail.MinCI }}</li>
+          <li>最大舒適指數：{{ detail.MaxCI }}</li>
+          <li>最大風速：{{ detail.WS }} 公尺/秒</li>
+          <li>最高體感溫度：{{ detail.MaxAT }} °C</li>
+          <li>最高溫度：{{ detail.MaxT }} °C</li>
+          <li>最低溫度：{{ detail.MinT }} °C</li>
+          <li>紫外線指數：{{ detail.UVI }}</li>
+          <li>天氣預報綜合描述：{{ detail.WeatherDescription }}</li>
+          <li>風向：{{ detail.WD }}</li>
+          <li>平均露點溫度{{ detail.Td }} °C</li>
+        </ul>
+        <!-- status modal text -->
+      </b-modal>
+    </section>
   </div>
 </template>
 
@@ -71,23 +89,35 @@ export default {
   name: "About3",
   data() {
     return {
-      selectedCity: "",
+      selectedCity: "null",
       getCityName: [
-        "",
         "臺北市",
         "新北市",
         "臺中市",
         "臺南市",
         "高雄市",
-        "花蓮市",
+        "花蓮縣",
         "金門縣",
       ],
       weatherItems: [],
-      weatherList: [],
       cities: [],
-      ddd: {
-		  cityName:'',
+      detail: {
+        cityName: "",
         Wx: 0,
+        PoP12h: 0,
+        T: 0,
+        RH: 0,
+        MinCI: 0,
+        MaxCI: 0,
+        WS: 0,
+        MaxAT: 0,
+        MinAT: 0,
+        MaxT: 0,
+        MinT: 0,
+        UVI: 0,
+        WeatherDescription: 0,
+        WD: 0,
+        Td: 0,
       },
       modal: false,
       changeCity: [
@@ -96,7 +126,7 @@ export default {
         "臺中市",
         "臺南市",
         "高雄市",
-        "花蓮市",
+        "花蓮縣",
         "金門縣",
       ],
     };
@@ -109,7 +139,7 @@ export default {
     getApi() {
       this.$http.get(weekWeather).then((res) => {
         this.weatherItems = res.data.records;
-        console.log(this.weatherItems);
+        // console.log(this.weatherItems);
         this.getData();
       });
     },
@@ -118,30 +148,39 @@ export default {
       let locations = this.weatherItems.locations[0].location;
 
       locations.forEach((item) => {
-        let weatherDesc = item.weatherElement[6].time;
-        let minT = item.weatherElement[8].time;
-        let maxT = item.weatherElement[12].time;
         let rain = item.weatherElement[0].time;
+        let avgT = item.weatherElement[1].time;
+        let rh = item.weatherElement[2].time;
+        let minCi = item.weatherElement[3].time;
+        let ws = item.weatherElement[4].time;
+        let maxAt = item.weatherElement[5].time;
+        let weatherDesc = item.weatherElement[6].time;
+        let maxCi = item.weatherElement[7].time;
+        let minT = item.weatherElement[8].time;
+        let uvi = item.weatherElement[9].time;
+        let weatherDescDetail = item.weatherElement[10].time;
+        let minAt = item.weatherElement[11].time;
+        let maxT = item.weatherElement[12].time;
+        let wd = item.weatherElement[13].time;
+        let td = item.weatherElement[14].time;
+
         let locationName = item.locationName;
+
         if (this.changeCity.indexOf(locationName) >= 0) {
           let date = moment().format("YYYY-MM-DD");
           let format = " 06:00:00";
           let nowHour = moment().format("HH") * 1;
-          console.log(nowHour);
+          // console.log(nowHour);
           if (nowHour > 18) {
             format = " 06:00:00";
-            date = moment()
-              .add(1, "days")
-              .format("YYYY-MM-DD");
+            date = moment().add(1, "days").format("YYYY-MM-DD");
           } else if (nowHour > 12) {
             format = " 18:00:00";
           }
           let maxTItem = maxT.find(
             (dayTtime) => dayTtime.startTime === date + format
           );
-          console.log(maxT);
-          console.log(maxTItem);
-          console.log(date + format);
+
           //最低溫
           let minTItem = minT.find(
             (dayTtime) => dayTtime.startTime === date + format
@@ -153,6 +192,50 @@ export default {
           );
           //降雨量
           let rainItem = rain.find(
+            (dayTtime) => dayTtime.startTime === date + format
+          );
+          //均溫
+          let avgTItem = avgT.find(
+            (dayTtime) => dayTtime.startTime === date + format
+          );
+          //濕度
+          let rhItem = rh.find(
+            (dayTtime) => dayTtime.startTime === date + format
+          );
+          //最小舒適指數
+          let minCiItem = minCi.find(
+            (dayTtime) => dayTtime.startTime === date + format
+          );
+          //最大風速
+          let wsItem = ws.find(
+            (dayTtime) => dayTtime.startTime === date + format
+          );
+          // 最高體感溫度
+          let maxAtItem = maxAt.find(
+            (dayTtime) => dayTtime.startTime === date + format
+          );
+          // 最大舒適指
+          let maxCiItem = maxCi.find(
+            (dayTtime) => dayTtime.startTime === date + format
+          );
+          //紫外線
+          let uviItem = uvi.find(
+            (dayTtime) => dayTtime.startTime === date + format
+          );
+          //天氣狀況詳述
+          let weatherDescDetailItem = weatherDescDetail.find(
+            (dayTtime) => dayTtime.startTime === date + format
+          );
+          // 最高體感溫度：
+          let minAtItem = minAt.find(
+            (dayTtime) => dayTtime.startTime === date + format
+          );
+          // 風向
+          let wdItem = wd.find(
+            (dayTtime) => dayTtime.startTime === date + format
+          );
+          // 平均露點溫度
+          let tdItem = td.find(
             (dayTtime) => dayTtime.startTime === date + format
           );
 
@@ -168,21 +251,43 @@ export default {
             status: weatherDescItem
               ? weatherDescItem.elementValue[0].value
               : "",
-            //最低攝氏
             minCelsius: minCelsius,
-            //最高攝氏
             maxCelsius: maxCelsius,
             rain: rainItem ? rainItem.elementValue[0].value : "",
+            avgTemp: avgTItem ? avgTItem.elementValue[0].value : "",
+            statusDetail: weatherDescDetailItem
+              ? weatherDescDetailItem.elementValue[0].value
+              : "",
+            avghumidity: rhItem ? rhItem.elementValue[0].value : "",
+            minComfort: minCiItem ? minCiItem.elementValue[0].value : "",
+            maxComfort: maxCiItem ? maxCiItem.elementValue[0].value : "",
+            maxWindSpeed: wsItem ? wsItem.elementValue[0].value : "",
+            maxFeel: maxAtItem ? maxAtItem.elementValue[0].value : "",
+            uvi: uviItem ? uviItem.elementValue[0].value : "",
+            windDirection: wdItem ? wdItem.elementValue[0].value : "",
+            dewPoint: tdItem ? tdItem.elementValue[0].value : "",
           });
         }
       });
     },
     showModal(item) {
+      // console.log(item);
       this.modal = true;
-	  this.ddd.cityName = item.locationName;
-      console.log(this.ddd.cityName, item.locationName);
-      console.log(item);
-      console.log(this.ddd);
+      this.detail.cityName = item.locationName;
+      this.detail.WeatherDescription = item.statusDetail;
+      this.detail.PoP12h = item.rain;
+      this.detail.T = item.avgTemp;
+      this.detail.Wx = item.status;
+      this.detail.RH = item.avghumidity;
+      this.detail.MinCI = item.minComfort;
+      this.detail.MaxCI = item.maxComfort;
+      this.detail.WS = item.maxWindSpeed;
+      this.detail.maxAt = item.maxFeel;
+      this.detail.MaxT = item.maxCelsius;
+      this.detail.MinT = item.minCelsius;
+      this.detail.UVI = item.uvi;
+      this.detail.WD = item.windDirection;
+      this.detail.Td = item.dewPoint;
     },
     getCity() {
       this.changeCity = [];
@@ -213,5 +318,9 @@ export default {
       border-radius: 6px;
     }
   }
+}
+.card {
+  outline: none;
+  margin: 0 1rem 3rem;
 }
 </style>

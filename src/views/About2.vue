@@ -317,7 +317,6 @@ export default {
       this.$http.get(nomal36h).then((res) => {
         this.weatherItems = res.data.records;
         // console.log(this.weatherItems);
-
         this.getWeek();
       });
     },
@@ -329,15 +328,15 @@ export default {
       });
     },
     getData() {
-	  this.tomorrow = [];
-	  if( !this.weatherItems  ){
-		  return;
-	  }
+      this.tomorrow = [];
+      if (!this.weatherItems) {
+        return;
+      }
       this.getCardData(" 18:00:00", 0);
       this.getCardData(" 06:00:00", 1);
       this.getCardData(" 18:00:00", 2);
       this.getTableData();
-    //   this.getTemperature();
+      //   this.getTemperature();
     },
 
     getCardData(format, d) {
@@ -351,9 +350,7 @@ export default {
       let minT = item.weatherElement[2].time;
       let maxT = item.weatherElement[3].time;
       let rain = item.weatherElement[1].time;
-      let date = moment()
-        .add(d, "days")
-        .format("YYYY-MM-DD");
+      let date = moment().add(d, "days").format("YYYY-MM-DD");
       //最高溫
       let maxTItem = maxT.find(
         (dayTtime) => dayTtime.startTime === date + format
@@ -409,11 +406,11 @@ export default {
       this.weatherNight = [];
       this.rainProbability = [];
       //取日期
-      this.dayList = [];
+      this.weekList = [];
       for (let i = 0; i < 7; i++) {
         let day = moment().add(i, "days");
         let week = day.format("E") * 1;
-        this.dayList.push({
+        this.weekList.push({
           date: day.format("MM/DD"),
           d: day.format("YYYY-MM-DD"), //驗證用
           week: this.toWeek(week * 1),
@@ -423,19 +420,20 @@ export default {
 
       //取地區資料
       let locations = this.weatherWeekItems.locations[0];
-      console.log(locations);
+
       //下拉選單地址與資料相同
       let locationData = locations.location.find(
         (item) => item.locationName === this.selectedCity
       );
 
-      this.dayList.forEach((item) => {
+      this.weekList.forEach((item) => {
         let date = item.d;
         let rain = locationData.weatherElement[0].time;
         let weatherDesc = locationData.weatherElement[1].time;
         let minT = locationData.weatherElement[2].time;
         let maxT = locationData.weatherElement[3].time;
 
+        //* 白天
         //最高溫
         let maxTItem = maxT.find(
           (dayTtime) => dayTtime.startTime === date + " 06:00:00"
@@ -448,6 +446,7 @@ export default {
         let weatherDescItem = weatherDesc.find(
           (dayTtime) => dayTtime.startTime === date + " 06:00:00"
         );
+
         //*晚上
         //最高溫
         let nightMaxTItem = maxT.find(
@@ -487,6 +486,7 @@ export default {
             ? Number(nightMaxTItem.elementValue[0].value)
             : "",
         });
+
         this.rainProbability.push(
           rainItem
             ? rainItem.elementValue[0].value
@@ -520,7 +520,7 @@ export default {
       this.option1.xaxis.categories = [];
       this.series1.data = [];
       this.series2.data = [];
-      this.dayList.forEach((item) => {
+      this.daylist.forEach((item) => {
         let date = item.d;
         let rain = locationData.weatherElement[0].time;
         let weatherDesc = locationData.weatherElement[1].time;
