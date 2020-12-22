@@ -117,7 +117,7 @@
 								</table>
 							</div>
 						</b-tab>
-						<b-tab title="一週溫度曲線" @click="getTemperature">
+						<b-tab title="一週溫度曲線">
 							<h4>{{ selectedCity }}</h4>
 
 							<div id="weekTemperature">
@@ -164,11 +164,11 @@ export default {
 			series1: [
 				{
 					name: '最高溫',
-					data: [10, 20, 16, 25, 16, 13, 25, 10, 20, 16, 25, 16, 13, 25],
+					data: [19, 19, 21, 21, 18, 18, 17, 17, 22, 22, 20, 20, 20, 19],
 				},
 				{
 					name: '最低溫',
-					data: [9, 16, 15, 16, 14, 10, 18, 9, 16, 15, 16, 14, 10, 18],
+					data: [16, 16, 18, 18, 17, 17, 16, 16, 15, 15, 16, 16, 16, 16],
 				},
 			],
 			option1: {
@@ -179,7 +179,7 @@ export default {
 						enabled: false,
 					},
 				},
-				colors: ['#E64A19', '#26C6DA'],
+				colors: ['#F4511E', '#4DD0E1'],
 				dataLabels: {
 					enabled: true,
 				},
@@ -234,7 +234,7 @@ export default {
 			series2: [
 				{
 					name: '一週降雨量',
-					data: [10, 45, 0, 0, 30, 60, 90],
+					data: [70, 70, 50, 20, 0, 0, 0],
 				},
 			],
 			option2: {
@@ -516,8 +516,8 @@ export default {
 			this.dayTemp = [];
 			this.nightTemp = [];
 			this.dateTemp = [];
-			this.series1 = options.series1;
-			this.option1 = options.option1;
+			this.series1 = [];
+			this.option1 = {};
 			// 取日期
 			for (let i = 0; i < 7; i++) {
 				let day = moment().add(i, 'days');
@@ -596,7 +596,7 @@ export default {
 						},
 						{
 							name: '最低溫',
-							data: this.dayTemp.minCelsius,
+							data: this.nightTemp.minCelsius,
 						},
 					],
 					option1: {
@@ -607,7 +607,7 @@ export default {
 								enabled: false,
 							},
 						},
-						colors: ['#2E93fA', '#66DA26'],
+						colors: ['#F4511E', '#4DD0E1'],
 						dataLabels: {
 							enabled: true,
 						},
@@ -645,6 +645,8 @@ export default {
 						},
 					},
 				};
+				this.series1.push({ data: options.series1[0].data });
+				this.option1 = options.option1;
 			});
 		},
 		getRainProbability() {
