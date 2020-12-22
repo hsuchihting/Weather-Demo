@@ -25,7 +25,7 @@
 			<div class="cards">
 				<div class="row">
 					<div
-						class="col-md-4"
+						class="col-md-4 col-lg-3"
 						v-for="(item, index) in cities"
 						:key="index"
 						@click="showModal(item)"
@@ -90,6 +90,7 @@ export default {
 		return {
 			selectedCity: 'null',
 			getCityName: [
+				'全臺縣市',
 				'臺北市',
 				'新北市',
 				'臺中市',
@@ -105,6 +106,7 @@ export default {
 			},
 			modal: false,
 			changeCity: [
+				'全臺縣市',
 				'臺北市',
 				'新北市',
 				'臺中市',
@@ -162,6 +164,7 @@ export default {
 					} else if (nowHour > 12) {
 						format = ' 18:00:00';
 					}
+
 					//*資料內容
 					//最高溫
 					let maxTItem = maxT.find(
@@ -276,9 +279,15 @@ export default {
 			this.detail.Td = item.dewPoint;
 		},
 		getCity() {
-			this.changeCity = [];
-			this.changeCity.push(this.selectedCity);
+			if (this.selectedCity === '全臺縣市') {
+				this.changeCity = this.getCityName;
+			} else {
+				this.changeCity = [];
+				this.changeCity.push(this.selectedCity);
+			}
 			this.getData();
+
+			//如果選全台就回傳全部資料，或是選到對應的縣市
 		},
 	},
 };

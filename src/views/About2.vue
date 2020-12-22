@@ -117,7 +117,7 @@
 								</table>
 							</div>
 						</b-tab>
-						<b-tab title="一週溫度曲線">
+						<b-tab title="一週溫度曲線" @click="getTemperature">
 							<h4>{{ selectedCity }}</h4>
 
 							<div id="weekTemperature">
@@ -131,7 +131,6 @@
 						</b-tab>
 						<b-tab title="一週降雨機率">
 							<h4>{{ selectedCity }}</h4>
-
 							<div id="weekRain">
 								<apexchart
 									type="line"
@@ -164,12 +163,12 @@ export default {
 		return {
 			series1: [
 				{
-					name: 'High Temperature in a Week',
-					data: [10, 20, 16, 25, 16, 11, 25],
+					name: '最高溫',
+					data: [10, 20, 16, 25, 16, 13, 25, 10, 20, 16, 25, 16, 13, 25],
 				},
 				{
-					name: 'Low Temperature in a Week',
-					data: [9, 16, 15, 16, 14, 10, 18],
+					name: '最低溫',
+					data: [9, 16, 15, 16, 14, 10, 18, 9, 16, 15, 16, 14, 10, 18],
 				},
 			],
 			option1: {
@@ -180,7 +179,7 @@ export default {
 						enabled: false,
 					},
 				},
-				colors: ['#2E93fA', '#66DA26'],
+				colors: ['#E64A19', '#26C6DA'],
 				dataLabels: {
 					enabled: true,
 				},
@@ -204,22 +203,37 @@ export default {
 					},
 				},
 				xaxis: {
+					title: {
+						text: '日期',
+					},
 					categories: [
-						'Jan',
-						'Feb',
-						'Mar',
-						'Apr',
-						'May',
-						'Jun',
-						'Jul',
-						'Aug',
-						'Sep',
+						'12/22 白天',
+						'12/22 晚上',
+						'12/23 白天',
+						'12/23 晚上',
+						'12/24 白天',
+						'12/24 晚上',
+						'12/25 白天',
+						'12/25 晚上',
+						'12/26 白天',
+						'12/26 晚上',
+						'12/27 白天',
+						'12/27 晚上',
+						'12/28 白天',
+						'12/28 晚上',
 					],
+				},
+				yaxis: {
+					title: {
+						text: '溫度',
+					},
+					min: 0,
+					max: 40,
 				},
 			},
 			series2: [
 				{
-					name: 'Rain in a Week',
+					name: '一週降雨量',
 					data: [10, 45, 0, 0, 30, 60, 90],
 				},
 			],
@@ -231,15 +245,12 @@ export default {
 						enabled: false,
 					},
 				},
-				colors: ['#2E93fA', '#66DA26'],
+				colors: ['#2E93fA'],
 				dataLabels: {
 					enabled: true,
 				},
 				stroke: {
 					curve: 'straight',
-				},
-				dataLabels: {
-					enabled: true,
 				},
 				markers: {
 					size: 2,
@@ -255,16 +266,17 @@ export default {
 					},
 				},
 				xaxis: {
+					title: {
+						text: '日期',
+					},
 					categories: [
-						'Jan',
-						'Feb',
-						'Mar',
-						'Apr',
-						'May',
-						'Jun',
-						'Jul',
-						'Aug',
-						'Sep',
+						'12/22',
+						'12/23',
+						'12/24',
+						'12/25',
+						'12/26',
+						'12/27',
+						'12/28',
 					],
 				},
 			},
@@ -286,6 +298,9 @@ export default {
 			],
 			tomorrow: [],
 			dayList: [],
+			dayTemp: [],
+			nightTemp: [],
+			dateTemp: [],
 		};
 	},
 	computed: {},
@@ -328,7 +343,7 @@ export default {
 			this.getCardData(' 06:00:00', 1);
 			this.getCardData(' 18:00:00', 2);
 			this.getTableData();
-			//   this.getTemperature();
+			this.getTemperature(this.weatherWeekItems);
 		},
 
 		getCardData(format, d) {
@@ -382,7 +397,6 @@ export default {
 			});
 		},
 		getTableData() {
-			this.option1.xaxis.categories[0] = this.selectedCity;
 			this.weatherDay = [];
 			this.weatherNight = [];
 			this.rainProbability = [];
@@ -438,7 +452,7 @@ export default {
 					(dayTtime) => dayTtime.startTime === date + ' 18:00:00'
 				);
 				//天氣說明
-				let weatherNightDecItem = weatherDesc.find(
+				let weatherNightDescItem = weatherDesc.find(
 					(dayTtime) => dayTtime.startTime === date + ' 18:00:00'
 				);
 				//降雨量
@@ -457,8 +471,8 @@ export default {
 				});
 
 				this.weatherNight.push({
-					status: weatherNightDecItem
-						? weatherNightDecItem.elementValue[0].value
+					status: weatherNightDescItem
+						? weatherNightDescItem.elementValue[0].value
 						: '',
 					minCelsius: nightMinTItem
 						? Number(nightMinTItem.elementValue[0].value)
@@ -497,17 +511,38 @@ export default {
 					return '';
 			}
 		},
-		getTemperature() {
-			this.option1.xaxis.categories = [];
-			this.series1.data = [];
-			this.series2.data = [];
-			this.daylist.forEach((item) => {
-				let date = item.d;
-				let rain = locationData.weatherElement[0].time;
-				let weatherDesc = locationData.weatherElement[1].time;
-				let minT = locationData.weatherElement[2].time;
-				let maxT = locationData.weatherElement[3].time;
+		getTemperature(originData) {
+			// console.log(originData);
+			this.dayTemp = [];
+			this.nightTemp = [];
+			this.dateTemp = [];
+			this.series1 = options.series1;
+			this.option1 = options.option1;
+			// 取日期
+			for (let i = 0; i < 7; i++) {
+				let day = moment().add(i, 'days');
+				let week = day.format('E') * 1;
+				this.dateTemp.push({
+					date: day.format('MM/DD'),
+					d: day.format('YYYY-MM-DD'), //驗證用
+					week: this.toWeek(week * 1),
+					holiday: week === 6 || week === 7,
+				});
+			}
 
+			// 取資料
+			let tempLocations = this.weatherWeekItems.locations[0];
+			let tempLocationData = tempLocations.location.find(
+				(item) => item.locationName === this.selectedCity
+			);
+
+			this.dateTemp.forEach((item) => {
+				let date = item.d;
+				let weatherDesc = tempLocationData.weatherElement[1].time;
+				let minT = tempLocationData.weatherElement[2].time;
+				let maxT = tempLocationData.weatherElement[3].time;
+
+				//* 白天
 				//最高溫
 				let maxTItem = maxT.find(
 					(dayTtime) => dayTtime.startTime === date + ' 06:00:00'
@@ -520,6 +555,7 @@ export default {
 				let weatherDescItem = weatherDesc.find(
 					(dayTtime) => dayTtime.startTime === date + ' 06:00:00'
 				);
+
 				//*晚上
 				//最高溫
 				let nightMaxTItem = maxT.find(
@@ -530,27 +566,19 @@ export default {
 					(dayTtime) => dayTtime.startTime === date + ' 18:00:00'
 				);
 				//天氣說明
-				let weatherNightDecItem = weatherDesc.find(
-					(dayTtime) => dayTtime.startTime === date + ' 18:00:00'
-				);
-				//降雨量
-				let rainItem = rain.find(
-					(dayTtime) => dayTtime.startTime === date + ' 06:00:00'
-				);
-
-				let rainNightItem = rain.find(
+				let weatherNightDescItem = weatherDesc.find(
 					(dayTtime) => dayTtime.startTime === date + ' 18:00:00'
 				);
 
-				this.weatherDay.push({
+				this.dayTemp.push({
 					status: weatherDescItem ? weatherDescItem.elementValue[0].value : '',
 					minCelsius: minTItem ? Number(minTItem.elementValue[0].value) : '',
 					maxCelsius: maxTItem ? Number(maxTItem.elementValue[0].value) : '',
 				});
 
-				this.weatherNight.push({
-					status: weatherNightDecItem
-						? weatherNightDecItem.elementValue[0].value
+				this.nightTemp.push({
+					status: weatherNightDescItem
+						? weatherNightDescItem.elementValue[0].value
 						: '',
 					minCelsius: nightMinTItem
 						? Number(nightMinTItem.elementValue[0].value)
@@ -559,21 +587,68 @@ export default {
 						? Number(nightMaxTItem.elementValue[0].value)
 						: '',
 				});
-				this.option1.xaxis.categories.push(date + ' 早上');
-				this.option1.xaxis.categories.push(date + '晚上');
-				this.series1.data.push(111);
-				this.series1.data.push(112);
-				this.series2.data.push(221);
-				this.series2.data.push(223);
 
-				// this.rainProbability.push(
-				//   rainItem
-				//     ? rainItem.elementValue[0].value
-				//     : rainNightItem
-				//     ? rainNightItem.elementValue[0].value
-				//     : ""
-				// );
+				let options = {
+					series1: [
+						{
+							name: '最高溫',
+							data: this.dayTemp.maxCelsius,
+						},
+						{
+							name: '最低溫',
+							data: this.dayTemp.minCelsius,
+						},
+					],
+					option1: {
+						chart: {
+							height: 350,
+							type: 'line',
+							zoom: {
+								enabled: false,
+							},
+						},
+						colors: ['#2E93fA', '#66DA26'],
+						dataLabels: {
+							enabled: true,
+						},
+						stroke: {
+							curve: 'straight',
+						},
+						dataLabels: {
+							enabled: true,
+						},
+						markers: {
+							size: 2,
+						},
+						title: {
+							text: '一週溫度曲線',
+							align: 'left',
+						},
+						grid: {
+							row: {
+								colors: ['#f3f3f3', '#ddd'],
+								opacity: 0.5,
+							},
+						},
+						xaxis: {
+							title: {
+								text: '溫度',
+							},
+							categories: this.dateTemp,
+						},
+						yaxis: {
+							title: {
+								text: '溫度',
+							},
+							min: 0,
+							max: 40,
+						},
+					},
+				};
 			});
+		},
+		getRainProbability() {
+			console.log(222);
 		},
 	},
 };
