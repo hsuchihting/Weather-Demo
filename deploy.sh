@@ -26,19 +26,17 @@ fi
 # 打包編譯
 npm run build
 
-
-echo dist
-# 移動到打包資料夾下，若你有調整的話打包後的資料夾請務必調整
+echo '移動目錄到編譯出來的 dist 資料夾'
+#移動到打包資料夾下，若你有調整的話打包後的資料夾請務必調整
 cd dist
 # 初始化並設置 Git
-
 git init
-git add -A
-git commit -m "update `date +'%Y-%m-%d %H:%M:%S'`"
+git add .
+git commit -m "update `date +'%Y-%m-%d %H:%M:%S'`";
 
 # 上傳到到 gh-pages
 # 如果是走 SSH 的話可能會比較不好調整
 git push -f $originUrl master:gh-pages
 
-
 cd -
+

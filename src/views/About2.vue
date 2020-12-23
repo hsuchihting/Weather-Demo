@@ -164,11 +164,11 @@ export default {
 			series1: [
 				{
 					name: '最高溫',
-					data: [19, 19, 21, 21, 18, 18, 17, 17, 22, 22, 20, 20, 20, 19],
+					data: [20, 21, 22, 23, 24, 25, 26],
 				},
 				{
 					name: '最低溫',
-					data: [16, 16, 18, 18, 17, 17, 16, 16, 15, 15, 16, 16, 16, 16],
+					data: [10, 10, 10, 10, 10, 10, 10],
 				},
 			],
 			option1: {
@@ -207,20 +207,14 @@ export default {
 						text: '日期',
 					},
 					categories: [
-						'12/22 白天',
-						'12/22 晚上',
-						'12/23 白天',
-						'12/23 晚上',
-						'12/24 白天',
-						'12/24 晚上',
-						'12/25 白天',
-						'12/25 晚上',
-						'12/26 白天',
-						'12/26 晚上',
-						'12/27 白天',
-						'12/27 晚上',
-						'12/28 白天',
-						'12/28 晚上',
+						'12/22',
+						'12/23',
+						'12/24',
+						'12/25',
+						'12/26',
+						'12/27',
+						'12/28',
+						'12/29',
 					],
 				},
 				yaxis: {
@@ -309,19 +303,6 @@ export default {
 		this.getWeek();
 	},
 	methods: {
-		updateChart() {
-			const max = 90;
-			const min = 20;
-			const newData = this.series[0].data.map(() => {
-				return Math.floor(Math.random() * (max - min + 1)) + min;
-			});
-			// In the same way, update the series option
-			this.series = [
-				{
-					data: newData,
-				},
-			];
-		},
 		getApi() {
 			this.$http.get(nomal36h).then((res) => {
 				this.weatherItems = res.data.records;
@@ -343,7 +324,7 @@ export default {
 			this.getCardData(' 06:00:00', 1);
 			this.getCardData(' 18:00:00', 2);
 			this.getTableData();
-			this.getTemperature(this.weatherWeekItems);
+			this.getTemperature();
 		},
 
 		getCardData(format, d) {
@@ -413,7 +394,7 @@ export default {
 				});
 			}
 
-			//取地區資料
+			//取陣列資料
 			let locations = this.weatherWeekItems.locations[0];
 
 			//下拉選單地址與資料相同
@@ -511,32 +492,32 @@ export default {
 					return '';
 			}
 		},
-		getTemperature(originData) {
-			// console.log(originData);
-			this.dayTemp = [];
-			this.nightTemp = [];
-			this.dateTemp = [];
+		getTemperature() {
+			this.tempDay = [];
+			this.tempNight = [];
 			this.series1 = [];
 			this.option1 = {};
+
 			// 取日期
+			this.tempDateList = [];
 			for (let i = 0; i < 7; i++) {
 				let day = moment().add(i, 'days');
 				let week = day.format('E') * 1;
-				this.dateTemp.push({
+				this.tempDateList.push({
 					date: day.format('MM/DD'),
 					d: day.format('YYYY-MM-DD'), //驗證用
 					week: this.toWeek(week * 1),
 					holiday: week === 6 || week === 7,
 				});
 			}
-
+			// console.log(this.tempDateList);
 			// 取資料
 			let tempLocations = this.weatherWeekItems.locations[0];
 			let tempLocationData = tempLocations.location.find(
 				(item) => item.locationName === this.selectedCity
 			);
 
-			this.dateTemp.forEach((item) => {
+			this.tempDateList.forEach((item) => {
 				let date = item.d;
 				let weatherDesc = tempLocationData.weatherElement[1].time;
 				let minT = tempLocationData.weatherElement[2].time;
@@ -570,13 +551,15 @@ export default {
 					(dayTtime) => dayTtime.startTime === date + ' 18:00:00'
 				);
 
-				this.dayTemp.push({
+				this.tempDay.push({
 					status: weatherDescItem ? weatherDescItem.elementValue[0].value : '',
 					minCelsius: minTItem ? Number(minTItem.elementValue[0].value) : '',
 					maxCelsius: maxTItem ? Number(maxTItem.elementValue[0].value) : '',
 				});
 
-				this.nightTemp.push({
+				// console.log(typeof Array.from(this.tempDay));
+
+				this.tempNight.push({
 					status: weatherNightDescItem
 						? weatherNightDescItem.elementValue[0].value
 						: '',
@@ -588,15 +571,19 @@ export default {
 						: '',
 				});
 
-				let options = {
+				let tempDashboard = {
 					series1: [
 						{
 							name: '最高溫',
-							data: this.dayTemp.maxCelsius,
+							data: this.tempDay.map((item) => {
+								return item.maxCelsius || 0;
+							}),
 						},
 						{
 							name: '最低溫',
-							data: this.nightTemp.minCelsius,
+							data: this.tempNight.map((item) => {
+								return item.minCelsius || 0;
+							}),
 						},
 					],
 					option1: {
@@ -619,6 +606,14 @@ export default {
 						},
 						markers: {
 							size: 2,
+							opacity: 0.9,
+							colors: ['#56c2d6'],
+							strokeColor: '#fff',
+							strokeWidth: 2,
+							style: 'inverted',
+							hover: {
+								size: 7,
+							},
 						},
 						title: {
 							text: '一週溫度曲線',
@@ -626,15 +621,18 @@ export default {
 						},
 						grid: {
 							row: {
-								colors: ['#f3f3f3', '#ddd'],
+								colors: ['#fff', '#eee'],
 								opacity: 0.5,
 							},
+							borderColor: '#ccc',
 						},
 						xaxis: {
 							title: {
-								text: '溫度',
+								text: '日期',
 							},
-							categories: this.dateTemp,
+							categories: this.tempDateList.map((item) => {
+								return item.week;
+							}),
 						},
 						yaxis: {
 							title: {
@@ -643,10 +641,26 @@ export default {
 							min: 0,
 							max: 40,
 						},
+						responsive: [
+							{
+								breakpoint: 600,
+								options: {
+									chart: {
+										toolbar: {
+											show: false,
+										},
+									},
+									legend: {
+										show: false,
+									},
+								},
+							},
+						],
 					},
 				};
-				this.series1.push({ data: options.series1[0].data });
-				this.option1 = options.option1;
+
+				this.series1 = tempDashboard.series1;
+				// this.option1 = tempDashboard.option1;
 			});
 		},
 		getRainProbability() {
@@ -698,3 +712,4 @@ table {
 	color: #fff;
 }
 </style>
+minCelsius
