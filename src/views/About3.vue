@@ -132,7 +132,6 @@ export default {
 				cityName = item.locationName;
 			}
 			return cityName;
-			console.log(cityName);
 		},
 	},
 	mounted() {
@@ -151,7 +150,6 @@ export default {
 			this.$http.get(newTaipeiCity).then((res) => {
 				this.newTaipeiCityItems = res.data.records;
 				// console.log(this.newTaipeiCityItems);
-
 				this.getData();
 			});
 		},
@@ -159,13 +157,6 @@ export default {
 		getData() {
 			this.TaiwanCities = [];
 			let locations = this.weatherItems.locations[0].location;
-			// let locations = [];
-			// for (const locationsItem of this.weatherItems.locations) {
-			// 	locations = locationsItem.location;
-			// 	console.log(typeof locations);
-			// 	return locations;
-			// }
-			// console.log(locations);
 
 			locations.forEach((item) => {
 				let locationName = item.locationName;
