@@ -105,7 +105,7 @@ export default {
 				'金門縣',
 			],
 			weatherItems: [],
-			newTaipeiCityItems: [],
+			newTaipeiCity: [],
 			TaiwanCities: [],
 			detail: {
 				cityName: '',
@@ -123,20 +123,10 @@ export default {
 			],
 		};
 	},
-	computed: {
-		showNewTaipeiCity() {
-			this.newTaipeiCityItems = [];
-			let cityName = '';
-			for (const item of this.newTaipeiCityItems.locations) {
-				// console.log(item);
-				cityName = item.locationName;
-			}
-			return cityName;
-		},
-	},
+	computed: {},
 	mounted() {
 		this.getApi();
-		this.getNewTaipeiCity();
+		this.getNewTaipeiCityApi();
 	},
 	methods: {
 		getApi() {
@@ -146,11 +136,11 @@ export default {
 				this.getData();
 			});
 		},
-		getNewTaipeiCity() {
+		getNewTaipeiCityApi() {
 			this.$http.get(newTaipeiCity).then((res) => {
 				this.newTaipeiCityItems = res.data.records;
 				// console.log(this.newTaipeiCityItems);
-				this.getData();
+				this.getNewTaipeiCity();
 			});
 		},
 
@@ -285,6 +275,102 @@ export default {
 				}
 			});
 		},
+		getNewTaipeiCity() {
+			this.newTaipeiCity = [];
+			let ntcLocations = this.newTaipeiCityItems.locations[0].location;
+			ntcLocations.forEach((item) => {
+				console.log(item);
+				let locationName = item.locationName;
+				let rain12h = item.weatherElement[0].time;
+				let weatherDesc = item.weatherElement[1].time;
+				let at = item.weatherElement[2].time;
+				let temp = item.weatherElement[3].time;
+				let rh = item.weatherElement[4].time;
+				let ci = item.weatherElement[5].time;
+				let weatherDescDetail = item.weatherElement[6].time;
+				let rain6h = item.weatherElement[7].time;
+				let ws = item.weatherElement[8].time;
+				let wd = item.weatherElement[9].time;
+				let td = item.weatherElement[10].time;
+
+				if (this.changeCity.indexOf(locationName) >= 0) {
+					let date = moment().format('YYYY-MM-DD');
+					let format = ' 06:00:00';
+					let nowHour = Number(moment().format('HH'));
+					// 取得時間區間
+					if (nowHour > 18) {
+						format = ' 06:00:00';
+						date = moment()
+							.add(1, 'days')
+							.format('YYYY-MM-DD');
+					} else if (nowHour > 12) {
+						format = ' 12:00:00';
+					}
+
+					//*資料內容
+
+					//12小時降雨量
+					let rain12hItem = rain12h.find((dateTime) => {
+						dateTime.startTime === date + format;
+					});
+					//天氣狀況
+					let weatcherDescItem = wheatherDesc.find((dateTime) => {
+						dateTime.startTime === date + format;
+					});
+					//體感溫度
+					let atItem = at.find(
+						(dateTime) => dayTtime.startTime === date + format
+					);
+					//平均溫度
+					let tempItem = temp.find(
+						(dateTime) => dayTtime.startTime === date + format
+					);
+					//相對濕度
+					let rhItem = rh.find(
+						(dateTime) => dayTtime.startTime === date + format
+					);
+					//舒適度指數
+					let ciItem = ci.find(
+						(dateTime) => dayTtime.startTime === date + format
+					);
+					//天氣預報綜合描述
+					let weatherDescDetailItem = weatherDescDetail.find(
+						(dateTime) => dayTtime.startTime === date + format
+					);
+					//6小時降雨機率
+					let rain6hItem = rain6h.find(
+						(dateTime) => dayTtime.startTime === date + format
+					);
+					//風速
+					let wsItem = ws.find(
+						(dateTime) => dayTtime.startTime === date + format
+					);
+					//風向
+					let wdItem = wd.find(
+						(dateTime) => dayTtime.startTime === date + format
+					);
+					//露點溫度
+					let tdItem = td.find(
+						(dateTime) => dayTtime.startTime === date + format
+					);
+
+					this.newTaipeiCity.push({
+						locationName: item.locationName,
+						status: weatherDescItem
+							? weatherDescItem.elementValue[0].value
+							: '',
+						rain: rainItem ? rainItem.elementValue[0].value : '',
+						statusDetail: weatherDescDetailItem
+							? weatherDescDetailItem.elementValue[0].value
+							: '',
+						avghumidity: rhItem ? rhItem.elementValue[0].value : '',
+						maxWindSpeed: wsItem ? wsItem.elementValue[0].value : '',
+						windDirection: wdItem ? wdItem.elementValue[0].value : '',
+						dewPoint: tdItem ? tdItem.elementValue[0].value : '',
+					});
+				}
+			});
+		},
 		showModal(item) {
 			this.modal = true;
 			this.detail = item;
@@ -297,7 +383,6 @@ export default {
 				this.changeCity.push(this.selectedCity);
 			}
 			this.getData();
-
 			//如果選全台就回傳全部資料，或是選到對應的縣市
 		},
 	},
