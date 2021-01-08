@@ -331,7 +331,13 @@ export default {
       let minT = item.weatherElement[2].time;
       let maxT = item.weatherElement[3].time;
       let rain = item.weatherElement[1].time;
+<<<<<<< HEAD
       let date = moment().add(d, "days").format("YYYY-MM-DD");
+=======
+      let date = moment()
+        .add(d, "days")
+        .format("YYYY-MM-DD");
+>>>>>>> fbe65561f7e1230399616eb5aa6465eb771e96be
       //最高溫
       let maxTItem = maxT.find(
         (dayTtime) => dayTtime.startTime === date + format
@@ -468,7 +474,11 @@ export default {
       this.tempNight = [];
       this.series1 = [];
       this.option1 = {};
+<<<<<<< HEAD
 
+=======
+      let categories = [];
+>>>>>>> fbe65561f7e1230399616eb5aa6465eb771e96be
       // 取日期
       this.tempDateList = [];
       for (let i = 0; i < 7; i++) {
@@ -480,6 +490,10 @@ export default {
           week: this.toWeek(week * 1),
           holiday: week === 6 || week === 7,
         });
+<<<<<<< HEAD
+=======
+        categories.push(`${day.format("MM/DD")}`);
+>>>>>>> fbe65561f7e1230399616eb5aa6465eb771e96be
       }
 
       // 取資料
@@ -595,13 +609,37 @@ export default {
               },
               borderColor: "#ccc",
             },
+<<<<<<< HEAD
+=======
+            // series: [
+            // 	{
+            // 		name: '日期',
+            // 		data: this.tempDateList.map((item) => {
+            // 			return item.date;
+            // 		}),
+            // 	},
+            // ],
+>>>>>>> fbe65561f7e1230399616eb5aa6465eb771e96be
             xaxis: {
               title: {
                 text: "日期",
               },
+<<<<<<< HEAD
               categories: this.tempDateList.map((item) => {
                 return item.date;
               }),
+=======
+              categories: [
+                "12/22",
+                "12/23",
+                "12/24",
+                "12/25",
+                "12/26",
+                "12/27",
+                "12/28",
+                "12/29",
+              ],
+>>>>>>> fbe65561f7e1230399616eb5aa6465eb771e96be
             },
             yaxis: {
               title: {
@@ -629,7 +667,17 @@ export default {
         };
 
         this.series1 = tempDashboard.series1;
+<<<<<<< HEAD
         // this.option1 = tempDashboard.option1;
+=======
+
+        this.option1.xaxis = {
+          title: {
+            text: "日期",
+          },
+          categories: categories,
+        };
+>>>>>>> fbe65561f7e1230399616eb5aa6465eb771e96be
       });
     },
     getRainProbability() {
@@ -738,7 +786,11 @@ export default {
                 text: "溫度",
               },
               min: 0,
+<<<<<<< HEAD
               max: 100,
+=======
+              max: 40,
+>>>>>>> fbe65561f7e1230399616eb5aa6465eb771e96be
             },
             responsive: [
               {
