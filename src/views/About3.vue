@@ -58,21 +58,18 @@
             {{ detail.locationName }}
           </div>
         </template>
-        <ul>
+        <ul class="infoModal">
           <li>天氣現象：{{ detail.status }}</li>
           <li>12 小時降雨機率：{{ detail.rain }} %</li>
           <li>平均溫度：{{ detail.avgTemp }} °C</li>
-          <li>平均相對溼度：{{ detail.avghumidity }} %</li>
-          <li>最小舒適指數：{{ detail.minComfort }}</li>
-          <li>最大舒適指數：{{ detail.maxComfort }}</li>
-          <li>最大風速：{{ detail.maxWindSpeed }} 公尺 / 秒</li>
-          <li>最高體感溫度：{{ detail.MaxAT }} °C</li>
-          <li>最高溫度：{{ detail.maxCelsius }} °C</li>
-          <li>最低溫度：{{ detail.minCelsius }} °C</li>
-          <li>紫外線指數：{{ detail.uvi }}</li>
           <li>天氣預報綜合描述：{{ detail.statusDetail }}</li>
+          <li>平均相對溼度：{{ detail.avghumidity }} %</li>
+          <li>體感溫度：{{ detail.Feel }} °C</li>
+          <li>舒適度指數：{{ detail.comfort }}</li>
+          <li>最大風速：{{ detail.maxWindSpeed }} 公尺 / 秒</li>
           <li>風向：{{ detail.windDirection }}</li>
           <li>平均露點溫度：{{ detail.dewPoint }} °C</li>
+          <li>6 小時降雨機率：{{ detail.sixHourRain }} °C</li>
         </ul>
       </b-modal>
     </section>
@@ -80,8 +77,28 @@
 </template>
 
 <script>
-import moment, { now } from "moment";
+let taipei =
+  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-061?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45";
 
+let newTaipei =
+  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-069?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45";
+
+let taichung =
+  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-073?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45";
+
+let tainan =
+  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-077?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45";
+
+let koahsung =
+  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-065?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45";
+
+let hualian =
+  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-041?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45";
+
+let kingmen =
+  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-085?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45";
+
+import moment, { now } from "moment";
 export default {
   name: "About3",
   data() {
@@ -97,10 +114,7 @@ export default {
         "金門縣",
       ],
       weatherItems: [],
-      allApiUrl: [
-        "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-061?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
-        "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-069?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
-      ],
+      allApiUrl: [taipei, newTaipei, taichung, koahsung, hualian, kingmen],
       TaiwanCities: [],
       detail: {
         cityName: "",
@@ -131,10 +145,12 @@ export default {
           this.getData();
         });
     },
-    getItemData(item, idx, date, format, timeKey) {
-      let dd = item.weatherElement[idx].time;
-      let ddItem = dd.find((dayTtime) => dayTtime[timeKey] === date + format);
-      return ddItem ? ddItem.elementValue[0].value : "";
+    getRainData(item, idx, date, format, timeKey) {
+      let rain = item.weatherElement[idx].time;
+      let rainItem = rain.find(
+        (dayTtime) => dayTtime[timeKey] === date + format
+      );
+      return rainItem ? rainItem.elementValue[0].value : "";
     },
     getData() {
       this.TaiwanCities = [];
@@ -157,17 +173,17 @@ export default {
         let format = " 06:00:00";
         let nowHour = Number(moment().format("HH"));
         let tt = Math.ceil(nowHour / 3) * 3;
-        // 取得時間區間
+        // 取得時間區間1
         if (nowHour >= 24) {
           format = " 00:00:00";
-          date = moment()
-            .add(1, "days")
-            .format("YYYY-MM-DD");
+          date = moment().add(1, "days").format("YYYY-MM-DD");
         } else if (nowHour >= 10) {
           format = ` ${tt}:00:00`;
         } else {
           format = ` 0${tt}:00:00`;
         }
+
+        // 取得時間區間2
 
         let date2 = moment().format("YYYY-MM-DD");
         let format2 = " 06:00:00";
@@ -175,22 +191,19 @@ export default {
         // 取得時間區間
         if (nowHour2 > 18) {
           format2 = " 06:00:00";
-          date2 = moment()
-            .add(1, "days")
-            .format("YYYY-MM-DD");
+          date2 = moment().add(1, "days").format("YYYY-MM-DD");
         } else if (nowHour > 12) {
           format2 = " 18:00:00";
         }
 
+        // 取得時間區間3
         let date3 = moment().format("YYYY-MM-DD");
         let format3 = " 12:00:00";
         let nowHour3 = Number(moment().format("HH"));
         // 取得時間區間
         if (nowHour3 >= 12) {
           format3 = " 00:00:00";
-          date3 = moment()
-            .add(1, "days")
-            .format("YYYY-MM-DD");
+          date3 = moment().add(1, "days").format("YYYY-MM-DD");
         }
 
         //*資料內容
@@ -228,7 +241,7 @@ export default {
         this.TaiwanCities.push({
           locationName: item.locationName,
           status: weatherDescItem ? weatherDescItem.elementValue[0].value : "",
-          rain: this.getItemData(item, 0, date3, format3, "startTime"),
+          rain: this.getRainData(item, 0, date2, format2, "startTime"),
           avgTemp: avgTItem ? avgTItem.elementValue[0].value : "",
           statusDetail: weatherDescDetailItem
             ? weatherDescDetailItem.elementValue[0].value
@@ -272,8 +285,22 @@ export default {
     }
   }
 }
-.card {
-  outline: none;
-  margin: 0 1rem 3rem;
+.cards {
+  .card {
+    margin: 0 1rem 3rem;
+    outline: none;
+    box-shadow: 0 0 5px 2px #ddd;
+    &:hover {
+      background-color: #fff9c4;
+      transition: all 1s ease-in-out;
+    }
+  }
+}
+
+.infoModal {
+  list-style: none;
+  > li {
+    padding: 1rem 0;
+  }
 }
 </style>

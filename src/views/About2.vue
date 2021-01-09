@@ -129,7 +129,7 @@
                 ></apexchart>
               </div>
             </b-tab>
-            <b-tab title="一週降雨機率">
+            <!-- <b-tab title="一週降雨機率">
               <h4>{{ selectedCity }}</h4>
               <div id="weekRain">
                 <apexchart
@@ -139,7 +139,7 @@
                   :series="series2"
                 ></apexchart>
               </div>
-            </b-tab>
+            </b-tab> -->
           </b-tabs>
         </section>
       </div>
@@ -182,6 +182,14 @@ export default {
         },
         markers: {
           size: 2,
+          opacity: 0.9,
+          colors: ["#56c2d6"],
+          strokeColor: "#fff",
+          strokeWidth: 2,
+          style: "inverted",
+          hover: {
+            size: 7,
+          },
         },
         title: {
           text: "一週溫度曲線",
@@ -189,24 +197,16 @@ export default {
         },
         grid: {
           row: {
-            colors: ["#f3f3f3", "#ddd"], // takes an array which will be repeated on columns
+            colors: ["#fff", "#eee"],
             opacity: 0.5,
           },
+          borderColor: "#ccc",
         },
         xaxis: {
           title: {
             text: "日期",
           },
-          categories: [
-            "12/22",
-            "12/23",
-            "12/24",
-            "12/25",
-            "12/26",
-            "12/27",
-            "12/28",
-            "12/29",
-          ],
+          categories: [],
         },
         yaxis: {
           title: {
@@ -216,55 +216,81 @@ export default {
           max: 40,
         },
       },
-      series2: [
-        {
-          name: "一週降雨量",
-          data: [70, 70, 50, 20, 0, 0, 0],
-        },
-      ],
-      option2: {
-        chart: {
-          height: 350,
-          type: "line",
-          zoom: {
-            enabled: false,
-          },
-        },
-        colors: ["#2E93fA"],
-        dataLabels: {
-          enabled: true,
-        },
-        stroke: {
-          curve: "straight",
-        },
-        markers: {
-          size: 2,
-        },
-        title: {
-          text: "一週降雨機率曲線",
-          align: "left",
-        },
-        grid: {
-          row: {
-            colors: ["#f3f3f3", "#ddd"], // takes an array which will be repeated on columns
-            opacity: 0.5,
-          },
-        },
-        xaxis: {
-          title: {
-            text: "日期",
-          },
-          categories: [
-            "12/22",
-            "12/23",
-            "12/24",
-            "12/25",
-            "12/26",
-            "12/27",
-            "12/28",
-          ],
-        },
-      },
+      // series2: [],
+      // option2: {
+      //   chart: {
+      //     height: 350,
+      //     type: "line",
+      //     zoom: {
+      //       enabled: false,
+      //     },
+      //   },
+      //   colors: ["#2E93fA"],
+      //   dataLabels: {
+      //     enabled: true,
+      //   },
+      //   stroke: {
+      //     curve: "straight",
+      //   },
+      //   markers: {
+      //     size: 2,
+      //     opacity: 0.9,
+      //     colors: ["#56c2d6"],
+      //     strokeColor: "#fff",
+      //     strokeWidth: 2,
+      //     style: "inverted",
+      //     hover: {
+      //       size: 7,
+      //     },
+      //   },
+      //   title: {
+      //     text: "一週降雨機率曲線",
+      //     align: "left",
+      //   },
+      //   grid: {
+      //     row: {
+      //       colors: ["#fff", "#eee"],
+      //       opacity: 0.5,
+      //     },
+      //     borderColor: "#ccc",
+      //   },
+      //   xaxis: {
+      //     title: {
+      //       text: "日期",
+      //     },
+      //     categories: [
+      //       "12/22",
+      //       "12/23",
+      //       "12/24",
+      //       "12/25",
+      //       "12/26",
+      //       "12/27",
+      //       "12/28",
+      //     ],
+      //   },
+      //   yaxis: {
+      //     title: {
+      //       text: "溫度",
+      //     },
+      //     min: 0,
+      //     max: 40,
+      //   },
+      //   responsive: [
+      //     {
+      //       breakpoint: 600,
+      //       options: {
+      //         chart: {
+      //           toolbar: {
+      //             show: false,
+      //           },
+      //         },
+      //         legend: {
+      //           show: false,
+      //         },
+      //       },
+      //     },
+      //   ],
+      // },
       weatherItems: [],
       weatherWeekItems: [],
       weatherDay: [],
@@ -286,7 +312,7 @@ export default {
       dayTemp: [],
       nightTemp: [],
       dateTemp: [],
-      rainWeekProbability: [],
+      // rainWeekProbability: [],
     };
   },
   computed: {},
@@ -317,7 +343,7 @@ export default {
       this.getCardData(" 18:00:00", 2);
       this.getTableData();
       this.getTemperature();
-      this.getRainProbability();
+      // this.getRainProbability();
     },
 
     getCardData(format, d) {
@@ -331,13 +357,7 @@ export default {
       let minT = item.weatherElement[2].time;
       let maxT = item.weatherElement[3].time;
       let rain = item.weatherElement[1].time;
-<<<<<<< HEAD
       let date = moment().add(d, "days").format("YYYY-MM-DD");
-=======
-      let date = moment()
-        .add(d, "days")
-        .format("YYYY-MM-DD");
->>>>>>> fbe65561f7e1230399616eb5aa6465eb771e96be
       //最高溫
       let maxTItem = maxT.find(
         (dayTtime) => dayTtime.startTime === date + format
@@ -474,11 +494,7 @@ export default {
       this.tempNight = [];
       this.series1 = [];
       this.option1 = {};
-<<<<<<< HEAD
-
-=======
       let categories = [];
->>>>>>> fbe65561f7e1230399616eb5aa6465eb771e96be
       // 取日期
       this.tempDateList = [];
       for (let i = 0; i < 7; i++) {
@@ -490,10 +506,7 @@ export default {
           week: this.toWeek(week * 1),
           holiday: week === 6 || week === 7,
         });
-<<<<<<< HEAD
-=======
         categories.push(`${day.format("MM/DD")}`);
->>>>>>> fbe65561f7e1230399616eb5aa6465eb771e96be
       }
 
       // 取資料
@@ -570,106 +583,13 @@ export default {
             },
           ],
           option1: {
-            chart: {
-              height: 350,
-              type: "line",
-              zoom: {
-                enabled: false,
-              },
-            },
-            colors: ["#F4511E", "#4DD0E1"],
-            dataLabels: {
-              enabled: true,
-            },
-            stroke: {
-              curve: "straight",
-            },
-            dataLabels: {
-              enabled: true,
-            },
-            markers: {
-              size: 2,
-              opacity: 0.9,
-              colors: ["#56c2d6"],
-              strokeColor: "#fff",
-              strokeWidth: 2,
-              style: "inverted",
-              hover: {
-                size: 7,
-              },
-            },
-            title: {
-              text: "一週溫度曲線",
-              align: "left",
-            },
-            grid: {
-              row: {
-                colors: ["#fff", "#eee"],
-                opacity: 0.5,
-              },
-              borderColor: "#ccc",
-            },
-<<<<<<< HEAD
-=======
-            // series: [
-            // 	{
-            // 		name: '日期',
-            // 		data: this.tempDateList.map((item) => {
-            // 			return item.date;
-            // 		}),
-            // 	},
-            // ],
->>>>>>> fbe65561f7e1230399616eb5aa6465eb771e96be
             xaxis: {
-              title: {
-                text: "日期",
-              },
-<<<<<<< HEAD
-              categories: this.tempDateList.map((item) => {
-                return item.date;
-              }),
-=======
-              categories: [
-                "12/22",
-                "12/23",
-                "12/24",
-                "12/25",
-                "12/26",
-                "12/27",
-                "12/28",
-                "12/29",
-              ],
->>>>>>> fbe65561f7e1230399616eb5aa6465eb771e96be
+              categories: [],
             },
-            yaxis: {
-              title: {
-                text: "溫度",
-              },
-              min: 0,
-              max: 40,
-            },
-            responsive: [
-              {
-                breakpoint: 600,
-                options: {
-                  chart: {
-                    toolbar: {
-                      show: false,
-                    },
-                  },
-                  legend: {
-                    show: false,
-                  },
-                },
-              },
-            ],
           },
         };
 
         this.series1 = tempDashboard.series1;
-<<<<<<< HEAD
-        // this.option1 = tempDashboard.option1;
-=======
 
         this.option1.xaxis = {
           title: {
@@ -677,141 +597,120 @@ export default {
           },
           categories: categories,
         };
->>>>>>> fbe65561f7e1230399616eb5aa6465eb771e96be
       });
     },
-    getRainProbability() {
-      this.series2 = [];
-      this.option2 = {};
-      this.rainWeekProbability = [];
+    // getRainProbability() {
+    //   this.series2 = [];
+    //   this.option2 = {};
+    //   this.rainWeekProbability = [];
 
-      // 取日期
-      this.rainDateList = [];
-      for (let i = 0; i < 7; i++) {
-        let day = moment().add(i, "days");
-        let week = day.format("E") * 1;
-        this.rainDateList.push({
-          date: day.format("MM/DD"),
-          d: day.format("YYYY-MM-DD"), //驗證用
-          week: this.toWeek(week * 1),
-          holiday: week === 6 || week === 7,
-        });
-      }
+    //   let categories2 = [];
+    //   // 取日期
+    //   this.rainDateList = [];
+    //   for (let i = 0; i < 7; i++) {
+    //     let day = moment().add(i, "days");
+    //     let week = day.format("E") * 1;
+    //     this.rainDateList.push({
+    //       date: day.format("MM/DD"),
+    //       d: day.format("YYYY-MM-DD"), //驗證用
+    //       week: this.toWeek(week * 1),
+    //       holiday: week === 6 || week === 7,
+    //     });
+    //     categories2.push(`${day.format("MM/DD")}`);
+    //   }
 
-      // 取資料
-      let rainLocations = this.weatherWeekItems.locations[0];
-      let rainLocationData = rainLocations.location.find(
-        (item) => item.locationName === this.selectedCity
-      );
+    //   // 取資料
+    //   let rainLocations = this.weatherWeekItems.locations[0];
+    //   let rainLocationData = rainLocations.location.find(
+    //     (item) => item.locationName === this.selectedCity
+    //   );
 
-      this.rainDateList.forEach((item) => {
-        let date = item.d;
-        let rain = rainLocationData.weatherElement[0].time;
+    //   this.rainDateList.forEach((item) => {
+    //     let date = item.d;
+    //     let rain = rainLocationData.weatherElement[0].time;
 
-        //降雨量
-        let rainItem = rain.find(
-          (dayTtime) => dayTtime.startTime === date + " 06:00:00"
-        );
+    //     //降雨量
+    //     let rainItem = rain.find(
+    //       (dayTtime) => dayTtime.startTime === date + " 06:00:00"
+    //     );
 
-        let rainNightItem = rain.find(
-          (dayTtime) => dayTtime.startTime === date + " 18:00:00"
-        );
-        this.rainWeekProbability.push(
-          rainItem
-            ? rainItem.elementValue[0].value
-            : rainNightItem
-            ? rainNightItem.elementValue[0].value
-            : ""
-        );
+    //     let rainNightItem = rain.find(
+    //       (dayTtime) => dayTtime.startTime === date + " 18:00:00"
+    //     );
+    //     this.rainWeekProbability.push(
+    //       rainItem
+    //         ? rainItem.elementValue[0].value
+    //         : rainNightItem
+    //         ? rainNightItem.elementValue[0].value
+    //         : ""
+    //     );
 
-        let rainDashboard = {
-          series2: [
-            {
-              name: "一週降雨量",
-              data: this.rainWeekProbability.map((item) => {
-                return item || 0;
-              }),
-            },
-          ],
-          option1: {
-            chart: {
-              height: 350,
-              type: "line",
-              zoom: {
-                enabled: false,
-              },
-            },
-            colors: ["#F4511E", "#4DD0E1"],
-            dataLabels: {
-              enabled: true,
-            },
-            stroke: {
-              curve: "straight",
-            },
-            dataLabels: {
-              enabled: true,
-            },
-            markers: {
-              size: 2,
-              opacity: 0.9,
-              colors: ["#56c2d6"],
-              strokeColor: "#fff",
-              strokeWidth: 2,
-              style: "inverted",
-              hover: {
-                size: 7,
-              },
-            },
-            title: {
-              text: "一週溫度曲線",
-              align: "left",
-            },
-            grid: {
-              row: {
-                colors: ["#fff", "#eee"],
-                opacity: 0.5,
-              },
-              borderColor: "#ccc",
-            },
-            xaxis: {
-              title: {
-                text: "日期",
-              },
-              categories: this.tempDateList.map((item) => {
-                return item.week;
-              }),
-            },
-            yaxis: {
-              title: {
-                text: "溫度",
-              },
-              min: 0,
-<<<<<<< HEAD
-              max: 100,
-=======
-              max: 40,
->>>>>>> fbe65561f7e1230399616eb5aa6465eb771e96be
-            },
-            responsive: [
-              {
-                breakpoint: 600,
-                options: {
-                  chart: {
-                    toolbar: {
-                      show: false,
-                    },
-                  },
-                  legend: {
-                    show: false,
-                  },
-                },
-              },
-            ],
-          },
-        };
-        this.series2 = rainDashboard.series2;
-      });
-    },
+    //     let rainDashboard = {
+    //       series2: [
+    //         {
+    //           name: "一週降雨量",
+    //           data: this.rainWeekProbability.map((item) => {
+    //             return item || 0;
+    //           }),
+    //         },
+    //       ],
+    //       option2: {
+    //         chart: {
+    //           height: 350,
+    //           type: "line",
+    //           zoom: {
+    //             enabled: false,
+    //           },
+    //         },
+    //         colors: ["#F4511E", "#4DD0E1"],
+    //         dataLabels: {
+    //           enabled: true,
+    //         },
+    //         stroke: {
+    //           curve: "straight",
+    //         },
+    //         dataLabels: {
+    //           enabled: true,
+    //         },
+    //         markers: {
+    //           size: 2,
+    //           opacity: 0.9,
+    //           colors: ["#56c2d6"],
+    //           strokeColor: "#fff",
+    //           strokeWidth: 2,
+    //           style: "inverted",
+    //           hover: {
+    //             size: 7,
+    //           },
+    //         },
+    //         title: {
+    //           text: "一週溫度曲線",
+    //           align: "left",
+    //         },
+    //         grid: {
+    //           row: {
+    //             colors: ["#fff", "#eee"],
+    //             opacity: 0.5,
+    //           },
+    //           borderColor: "#ccc",
+    //         },
+    //         xaxis: {
+    //           title: {
+    //             text: "日期",
+    //           },
+    //           categories: [],
+    //         },
+    //       },
+    //     };
+    //     this.series2 = rainDashboard.series2;
+    //     this.option2.xaxis = {
+    //       title: {
+    //         text: "日期",
+    //       },
+    //       categories: categories2,
+    //     };
+    //   });
+    // },
     toWeek(week) {
       switch (week) {
         case 1:
