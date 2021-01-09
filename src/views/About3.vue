@@ -153,14 +153,14 @@ export default {
           this.getData();
         });
     },
-    getRainData(item, idx, date, format, timeKey) {
+    rainData(item, idx, date, format, timeKey) {
       let rain = item.weatherElement[idx].time;
       let rainItem = rain.find(
         (dayTtime) => dayTtime[timeKey] === date + format
       );
       return rainItem ? rainItem.elementValue[0].value : "";
     },
-    getWeatherDesc(item, idx, date, format, timeKey) {
+    weatherDesc(item, idx, date, format, timeKey) {
       let weatherDesc = item.weatherElement[idx].time;
       let weatherDescItem = weatherDesc.find(
         (dayTtime) => dayTtime[timeKey] === date + format
@@ -252,8 +252,8 @@ export default {
 
         this.TaiwanCities.push({
           locationName: item.locationName,
-          rain: this.getRainData(item, 0, date3, format3, "startTime"),
-          status: this.getWeatherDesc(item, 1, date, format, "startTime"),
+          rain: this.rainData(item, 0, date3, format3, "startTime"),
+          status: this.weatherDesc(item, 1, date, format, "startTime"),
           avgTemp: avgTItem ? avgTItem.elementValue[0].value : "",
           statusDetail: weatherDescDetailItem
             ? weatherDescDetailItem.elementValue[0].value
@@ -312,7 +312,8 @@ export default {
 .infoModal {
   list-style: none;
   > li {
-    padding: 1rem 0;
+    padding: 5px 0;
+    
   }
 }
 </style>
