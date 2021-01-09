@@ -114,7 +114,15 @@ export default {
         "金門縣",
       ],
       weatherItems: [],
-      allApiUrl: [taipei, newTaipei, taichung, koahsung, hualian, kingmen],
+      allApiUrl: [
+        taipei,
+        newTaipei,
+        taichung,
+        tainan,
+        koahsung,
+        hualian,
+        kingmen,
+      ],
       TaiwanCities: [],
       detail: {
         cityName: "",
