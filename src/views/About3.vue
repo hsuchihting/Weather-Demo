@@ -160,13 +160,20 @@ export default {
       );
       return rainItem ? rainItem.elementValue[0].value : "";
     },
+    getWeatherDesc(item, idx, date, format, timeKey) {
+      let weatherDesc = item.weatherElement[idx].time;
+      let weatherDescItem = weatherDesc.find(
+        (dayTtime) => dayTtime[timeKey] === date + format
+      );
+      return weatherDescItem ? weatherDescItem.elementValue[0].value : "";
+    },
     getData() {
       this.TaiwanCities = [];
       let locations = this.weatherItems.locations[0].location;
 
       locations.forEach((item) => {
         let locationName = item.locationName;
-        let weatherDesc = item.weatherElement[1].time;
+
         let at = item.weatherElement[2].time;
         let avgT = item.weatherElement[3].time;
         let rh = item.weatherElement[4].time;
@@ -217,9 +224,6 @@ export default {
         //*資料內容
 
         //天氣說明
-        let weatherDescItem = weatherDesc.find(
-          (dayTtime) => dayTtime.startTime === date + format
-        );
 
         //均溫
         let avgTItem = avgT.find(
@@ -248,8 +252,8 @@ export default {
 
         this.TaiwanCities.push({
           locationName: item.locationName,
-          status: weatherDescItem ? weatherDescItem.elementValue[0].value : "",
-          rain: this.getRainData(item, 0, date2, format2, "startTime"),
+          rain: this.getRainData(item, 0, date3, format3, "startTime"),
+          status: this.getWeatherDesc(item, 1, date, format, "startTime"),
           avgTemp: avgTItem ? avgTItem.elementValue[0].value : "",
           statusDetail: weatherDescDetailItem
             ? weatherDescDetailItem.elementValue[0].value
