@@ -28,8 +28,6 @@
             class="col-md-4 col-lg-3"
             v-for="(item, index) in TaiwanCities"
             :key="index"
-            @click="showModal(item)"
-            v-b-modal="'statusModal'"
           >
             <div class="card">
               <div class="card-body">
@@ -40,6 +38,14 @@
                 <p>平均溫度：{{ item.avgTemp }} °C</p>
                 <p>降雨機率：{{ item.rain }} %</p>
               </div>
+              <button
+                class="btn btn-info"
+                @click="showModal(item)"
+                v-b-modal="'statusModal'"
+              >
+                <i class="fas fa-bars pr-2"></i>
+                <span>更多資訊</span>
+              </button>
             </div>
           </div>
         </div>
@@ -50,7 +56,7 @@
     <section>
       <b-modal
         id="statusModal"
-        header-bg-variant="primary"
+        header-bg-variant="info"
         header-close-variant="white"
       >
         <template slot="modal-title">
@@ -313,7 +319,6 @@ export default {
   list-style: none;
   > li {
     padding: 5px 0;
-    
   }
 }
 </style>

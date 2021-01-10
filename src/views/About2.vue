@@ -75,7 +75,7 @@
             <b-tab title="一週預報" active>
               <div class="table-responsive">
                 <table class="table table-hover table-bordered">
-                  <thead class="table-primary">
+                  <thead class="table-info">
                     <tr>
                       <th scope="col">
                         {{ selectedCity }}
@@ -94,21 +94,21 @@
                   </thead>
                   <tbody>
                     <tr class="day">
-                      <th class="table-primary">白天</th>
+                      <th class="table-info">白天</th>
                       <td v-for="(item, index) in weatherDay" :key="index">
                         <span>{{ item.status }}</span>
                         <p>{{ item.minCelsius }} - {{ item.maxCelsius }} °C</p>
                       </td>
                     </tr>
                     <tr class="night">
-                      <th class="table-primary">晚上</th>
+                      <th class="table-info">晚上</th>
                       <td v-for="(item, index) in weatherNight" :key="index">
                         <span>{{ item.status }}</span>
                         <p>{{ item.minCelsius }} - {{ item.maxCelsius }} °C</p>
                       </td>
                     </tr>
                     <tr class="rain">
-                      <th class="table-primary">降雨機率</th>
+                      <th class="table-info">降雨機率</th>
                       <td v-for="(item, index) in rainProbability" :key="index">
                         <span>{{ item }} %</span>
                       </td>
@@ -759,10 +759,14 @@ export default {
 }
 .cards {
   margin-bottom: 3rem;
+  .card {
+    box-shadow: 0 0 5px 2px #ddd;
+  }
 }
 table {
   margin-top: 1rem;
   width: 100%;
+  background-color: #fff;
   th,
   td {
     vertical-align: middle;
@@ -776,5 +780,8 @@ table {
   background-color: #f4511e;
   color: #fff;
 }
+.nav-link {
+  background-color: #fff;
+}
 </style>
-minCelsius
+

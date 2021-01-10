@@ -1,17 +1,17 @@
 <template>
   <div id="app">
     <div id="nav">
-      <b-button-group class="buttonGroup">
-        <b-button variant="success">
+      <div class="btn-group mr-2" role="group">
+        <button type="button" class="btn btn-info">
           <router-link to="/about">一週天氣預報</router-link>
-        </b-button>
-        <b-button variant="success">
+        </button>
+        <button type="button" class="btn btn-info">
           <router-link to="/about2">縣市預報</router-link>
-        </b-button>
-        <b-button variant="success">
+        </button>
+        <button type="button" class="btn btn-info">
           <router-link to="/about3">鄉鎮天氣預報</router-link>
-        </b-button>
-      </b-button-group>
+        </button>
+      </div>
     </div>
     <router-view />
   </div>
@@ -23,12 +23,13 @@ export default {
 };
 </script>
 <style lang="scss">
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  background-color: #fafafa;
+  background-color: #fff;
 }
 
 #nav {
