@@ -129,17 +129,7 @@
                 ></apexchart>
               </div>
             </b-tab>
-            <!-- <b-tab title="一週降雨機率">
-              <h4>{{ selectedCity }}</h4>
-              <div id="weekRain">
-                <apexchart
-                  type="line"
-                  height="350"
-                  :options="option2"
-                  :series="series2"
-                ></apexchart>
-              </div>
-            </b-tab> -->
+          
           </b-tabs>
         </section>
       </div>
@@ -149,9 +139,9 @@
 
 <script>
 let nomal36h =
-  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45&locationName=%E8%8A%B1%E8%93%AE%E7%B8%A3,%E9%87%91%E9%96%80%E7%B8%A3,%E8%87%BA%E5%8C%97%E5%B8%82,%E6%96%B0%E5%8C%97%E5%B8%82,%E8%87%BA%E4%B8%AD%E5%B8%82,%E8%87%BA%E5%8D%97%E5%B8%82,%E9%AB%98%E9%9B%84%E5%B8%82&elementName=Wx,PoP,MinT,MaxT";
+  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45&elementName=Wx,PoP,MinT,MaxT";
 let taiwanWeek =
-  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45&locationName=%E8%8A%B1%E8%93%AE%E7%B8%A3,%E6%BE%8E%E6%B9%96%E7%B8%A3,%E9%87%91%E9%96%80%E7%B8%A3,%E8%87%BA%E5%8C%97%E5%B8%82,%E6%96%B0%E5%8C%97%E5%B8%82,%E6%A1%83%E5%9C%92%E5%B8%82,%E8%87%BA%E4%B8%AD%E5%B8%82,%E8%87%BA%E5%8D%97%E5%B8%82,%E9%AB%98%E9%9B%84%E5%B8%82&elementName=MinT,MaxT,PoP12h,Wx";
+  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45&elementName=MinT,MaxT,PoP12h,Wx";
 import moment from "moment";
 import VueApexCharts from "vue-apexcharts";
 export default {
@@ -216,81 +206,7 @@ export default {
           max: 40,
         },
       },
-      // series2: [],
-      // option2: {
-      //   chart: {
-      //     height: 350,
-      //     type: "line",
-      //     zoom: {
-      //       enabled: false,
-      //     },
-      //   },
-      //   colors: ["#2E93fA"],
-      //   dataLabels: {
-      //     enabled: true,
-      //   },
-      //   stroke: {
-      //     curve: "straight",
-      //   },
-      //   markers: {
-      //     size: 2,
-      //     opacity: 0.9,
-      //     colors: ["#56c2d6"],
-      //     strokeColor: "#fff",
-      //     strokeWidth: 2,
-      //     style: "inverted",
-      //     hover: {
-      //       size: 7,
-      //     },
-      //   },
-      //   title: {
-      //     text: "一週降雨機率曲線",
-      //     align: "left",
-      //   },
-      //   grid: {
-      //     row: {
-      //       colors: ["#fff", "#eee"],
-      //       opacity: 0.5,
-      //     },
-      //     borderColor: "#ccc",
-      //   },
-      //   xaxis: {
-      //     title: {
-      //       text: "日期",
-      //     },
-      //     categories: [
-      //       "12/22",
-      //       "12/23",
-      //       "12/24",
-      //       "12/25",
-      //       "12/26",
-      //       "12/27",
-      //       "12/28",
-      //     ],
-      //   },
-      //   yaxis: {
-      //     title: {
-      //       text: "溫度",
-      //     },
-      //     min: 0,
-      //     max: 40,
-      //   },
-      //   responsive: [
-      //     {
-      //       breakpoint: 600,
-      //       options: {
-      //         chart: {
-      //           toolbar: {
-      //             show: false,
-      //           },
-      //         },
-      //         legend: {
-      //           show: false,
-      //         },
-      //       },
-      //     },
-      //   ],
-      // },
+     
       weatherItems: [],
       weatherWeekItems: [],
       weatherDay: [],
@@ -301,18 +217,33 @@ export default {
       getCityName: [
         "臺北市",
         "新北市",
+        "桃園市",
+        "基隆市",
         "臺中市",
+        "新竹縣",
+        "新竹市",
+        "苗栗縣",
+        "彰化縣",
+        "南投縣",
         "臺南市",
         "高雄市",
+        "雲林縣",
+        "嘉義縣",
+        "嘉義市",
+        "屏東縣",
+        "宜蘭縣",
         "花蓮縣",
+        "臺東縣",
         "金門縣",
+        "澎湖縣",
+        "連江縣",
       ],
       tomorrow: [],
       dayList: [],
       dayTemp: [],
       nightTemp: [],
       dateTemp: [],
-      // rainWeekProbability: [],
+  
     };
   },
   computed: {},
@@ -599,118 +530,7 @@ export default {
         };
       });
     },
-    // getRainProbability() {
-    //   this.series2 = [];
-    //   this.option2 = {};
-    //   this.rainWeekProbability = [];
-
-    //   let categories2 = [];
-    //   // 取日期
-    //   this.rainDateList = [];
-    //   for (let i = 0; i < 7; i++) {
-    //     let day = moment().add(i, "days");
-    //     let week = day.format("E") * 1;
-    //     this.rainDateList.push({
-    //       date: day.format("MM/DD"),
-    //       d: day.format("YYYY-MM-DD"), //驗證用
-    //       week: this.toWeek(week * 1),
-    //       holiday: week === 6 || week === 7,
-    //     });
-    //     categories2.push(`${day.format("MM/DD")}`);
-    //   }
-
-    //   // 取資料
-    //   let rainLocations = this.weatherWeekItems.locations[0];
-    //   let rainLocationData = rainLocations.location.find(
-    //     (item) => item.locationName === this.selectedCity
-    //   );
-
-    //   this.rainDateList.forEach((item) => {
-    //     let date = item.d;
-    //     let rain = rainLocationData.weatherElement[0].time;
-
-    //     //降雨量
-    //     let rainItem = rain.find(
-    //       (dayTtime) => dayTtime.startTime === date + " 06:00:00"
-    //     );
-
-    //     let rainNightItem = rain.find(
-    //       (dayTtime) => dayTtime.startTime === date + " 18:00:00"
-    //     );
-    //     this.rainWeekProbability.push(
-    //       rainItem
-    //         ? rainItem.elementValue[0].value
-    //         : rainNightItem
-    //         ? rainNightItem.elementValue[0].value
-    //         : ""
-    //     );
-
-    //     let rainDashboard = {
-    //       series2: [
-    //         {
-    //           name: "一週降雨量",
-    //           data: this.rainWeekProbability.map((item) => {
-    //             return item || 0;
-    //           }),
-    //         },
-    //       ],
-    //       option2: {
-    //         chart: {
-    //           height: 350,
-    //           type: "line",
-    //           zoom: {
-    //             enabled: false,
-    //           },
-    //         },
-    //         colors: ["#F4511E", "#4DD0E1"],
-    //         dataLabels: {
-    //           enabled: true,
-    //         },
-    //         stroke: {
-    //           curve: "straight",
-    //         },
-    //         dataLabels: {
-    //           enabled: true,
-    //         },
-    //         markers: {
-    //           size: 2,
-    //           opacity: 0.9,
-    //           colors: ["#56c2d6"],
-    //           strokeColor: "#fff",
-    //           strokeWidth: 2,
-    //           style: "inverted",
-    //           hover: {
-    //             size: 7,
-    //           },
-    //         },
-    //         title: {
-    //           text: "一週溫度曲線",
-    //           align: "left",
-    //         },
-    //         grid: {
-    //           row: {
-    //             colors: ["#fff", "#eee"],
-    //             opacity: 0.5,
-    //           },
-    //           borderColor: "#ccc",
-    //         },
-    //         xaxis: {
-    //           title: {
-    //             text: "日期",
-    //           },
-    //           categories: [],
-    //         },
-    //       },
-    //     };
-    //     this.series2 = rainDashboard.series2;
-    //     this.option2.xaxis = {
-    //       title: {
-    //         text: "日期",
-    //       },
-    //       categories: categories2,
-    //     };
-    //   });
-    // },
+   
     toWeek(week) {
       switch (week) {
         case 1:

@@ -144,7 +144,7 @@
 
 <script>
 let weather =
-  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45&locationName=%E8%8A%B1%E8%93%AE%E7%B8%A3,%E9%87%91%E9%96%80%E7%B8%A3,%E8%87%BA%E5%8C%97%E5%B8%82,%E6%96%B0%E5%8C%97%E5%B8%82,%E8%87%BA%E4%B8%AD%E5%B8%82,%E8%87%BA%E5%8D%97%E5%B8%82,%E9%AB%98%E9%9B%84%E5%B8%82&elementName=MinT,MaxT,T,Wx";
+  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45&elementName=MinT,MaxT,T,Wx";
 
 import moment from "moment";
 export default {
@@ -155,11 +155,11 @@ export default {
       subject: null,
       celsius: true,
       area: [
-        ["臺北市", "新北市"],
-        ["臺中市"],
-        ["臺南市", "高雄市"],
-        ["花蓮縣"],
-        ["金門縣"],
+        ["臺北市", "新北市", "桃園市", "基隆市"],
+        ["臺中市", "新竹縣", "新竹市", "苗栗縣", "彰化縣", "南投縣"],
+        ["臺南市", "高雄市", "雲林縣", "嘉義縣", "嘉義市", "屏東縣"],
+        ["宜蘭縣", "花蓮縣", "臺東縣"],
+        ["金門縣", "澎湖縣", "連江縣"],
       ],
       range: -1,
       dayList: [],

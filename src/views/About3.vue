@@ -83,26 +83,73 @@
 </template>
 
 <script>
-let taipei =
-  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-061?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45";
+let api = {
+  ilan:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-001?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
 
-let newTaipei =
-  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-069?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45";
+  toayuan:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-005?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
 
-let taichung =
-  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-073?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45";
+  hsinchu:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-009?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
 
-let tainan =
-  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-077?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45";
+  mioali:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-013?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
 
-let koahsung =
-  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-065?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45";
+  chanhua:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-017?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
 
-let hualian =
-  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-041?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45";
+  nanto:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-021?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
 
-let kingmen =
-  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-085?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45";
+  yunlin:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-025?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  chayi:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-029?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  pingtung:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-033?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  taitung:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-037?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  penghu:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-045?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  keelung:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-049?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  hsinchuCity:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-053?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  chayiCity:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-057?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  taipei:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-061?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  newTaipei:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-069?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  taichung:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-073?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  tainan:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-077?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  koahsung:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-065?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  hualian:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-041?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  kingmen:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-085?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+
+  lianchiang:
+    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-081?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45",
+};
 
 import moment, { now } from "moment";
 export default {
@@ -113,21 +160,51 @@ export default {
       getCityName: [
         "臺北市",
         "新北市",
+        "桃園市",
+        "基隆市",
         "臺中市",
+        "新竹縣",
+        "新竹市",
+        "苗栗縣",
+        "彰化縣",
+        "南投縣",
         "臺南市",
         "高雄市",
+        "雲林縣",
+        "嘉義縣",
+        "嘉義市",
+        "屏東縣",
+        "宜蘭縣",
         "花蓮縣",
+        "臺東縣",
         "金門縣",
+        "澎湖縣",
+        "連江縣",
       ],
       weatherItems: [],
       allApiUrl: [
-        taipei,
-        newTaipei,
-        taichung,
-        tainan,
-        koahsung,
-        hualian,
-        kingmen,
+        api.taipei,
+        api.newTaipei,
+        api.toayuan,
+        api.keelung,
+        api.taichung,
+        api.hsinchu,
+        api.hsinchuCity,
+        api.mioali,
+        api.chanhua,
+        api.nanto,
+        api.tainan,
+        api.koahsung,
+        api.yunlin,
+        api.chayi,
+        api.chayiCity,
+        api.pingtung,
+        api.ilan,
+        api.hualian,
+        api.taitung,
+        api.kingmen,
+        api.penghu,
+        api.lianchiang,
       ],
       TaiwanCities: [],
       detail: {
@@ -137,11 +214,26 @@ export default {
       changeCity: [
         "臺北市",
         "新北市",
+        "桃園市",
+        "基隆市",
         "臺中市",
+        "新竹縣",
+        "新竹市",
+        "苗栗縣",
+        "彰化縣",
+        "南投縣",
         "臺南市",
         "高雄市",
+        "雲林縣",
+        "嘉義縣",
+        "嘉義市",
+        "屏東縣",
+        "宜蘭縣",
         "花蓮縣",
+        "臺東縣",
         "金門縣",
+        "澎湖縣",
+        "連江縣",
       ],
     };
   },
