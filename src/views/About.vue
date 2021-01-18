@@ -369,12 +369,12 @@ export default {
             //最低華氏
             minFahrenheit:
               avgMinCelsius != ""
-                ? (avgMinCelsius + 32) * (1.8).toFixed(0)
+                ? ((avgMinCelsius * 9) / 5 + 32).toFixed(0)
                 : "",
             //最高華氏
             maxFahrenheit:
               avgMaxCelsius != ""
-                ? (avgMaxCelsius + 32) * (1.8).toFixed(0)
+                ? ((avgMaxCelsius * 9) / 5 + 32).toFixed(0)
                 : "",
           });
         });
