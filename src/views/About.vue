@@ -144,7 +144,9 @@
 
 <script>
 let weather =
-  "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45&elementName=MinT,MaxT,T,Wx";
+  "https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWA-4F857FFB-9BF6-4282-AF03-1359E4B9FE76&elementName=Wx,MinT,MaxT";
+
+
 
 import moment from "moment";
 export default {
@@ -190,8 +192,9 @@ export default {
   methods: {
     getApi() {
       this.$http.get(weather).then((res) => {
-        this.weatherItems = res.data.records.locations;
-        // console.log(this.weatherItems);
+        this.weatherItems = res.data.records.location;
+
+        console.log(this.weatherItems);
         this.getData();
       });
     },
@@ -215,7 +218,7 @@ export default {
 
       //取城市
       this.cities = [];
-      let locations = this.weatherItems[0].location;
+      let locations = this.weatherItems;
       let location2 = [];
 
       //縣市標籤
@@ -235,8 +238,9 @@ export default {
         let weatherAvg = [];
         let dayT = item.weatherElement[0].time;
         let weatherDesc = item.weatherElement[1].time;
-        let minT = item.weatherElement[2].time;
-        let maxT = item.weatherElement[3].time;
+        let minT = item.weatherElement[1].time;
+        let maxT = item.weatherElement[2].time;
+        
         //對應日期的天氣資訊
         this.dayList.forEach((item) => {
           let date = item.d;
@@ -286,21 +290,21 @@ export default {
               dayTtime.startTime ===
                 moment(date).add(1, "days").format("YYYY-MM-DD") + " 00:00:00"
           );
-
+          
           //取得白天最高溫與最低溫
           let minCelsius = minTItem
-            ? Number(minTItem.elementValue[0].value)
+            ? Number(minTItem.parameter.parameterName)
             : "";
           let maxCelsius = maxTItem
-            ? Number(maxTItem.elementValue[0].value)
+            ? Number(maxTItem.parameter.parameterName)
             : "";
           let minCelsius2 = nightMinTItem
-            ? Number(nightMinTItem.elementValue[0].value)
+            ? Number(nightMinTItem.parameter.parameterName)
             : "";
 
           //取得晚上最高溫與最低溫
           let maxCelsius2 = nightMaxTItem
-            ? Number(nightMaxTItem.elementValue[0].value)
+            ? Number(nightMaxTItem.parameter.parameterName)
             : "";
           let avgMinCelsius = "";
           if (minCelsius != "" && minCelsius2 != "") {
@@ -310,13 +314,13 @@ export default {
           let avgMaxCelsius = "";
           if (maxCelsius != "" && maxCelsius2 != "") {
             avgMaxCelsius = Math.max(maxCelsius, maxCelsius2);
-          }
-
+          }  
+          
           //* 新增白天資料
           weatherDay.push({
             //天氣概況
             status: weatherDescItem
-              ? weatherDescItem.elementValue[0].value
+              ? weatherDescItem.parameter.parameterName
               : "",
             //最低攝氏
             minCelsius: minCelsius,
@@ -324,11 +328,11 @@ export default {
             maxCelsius: maxCelsius,
             //最低華氏
             minFahrenheit: minTItem
-              ? Number((minTItem.elementValue[0].value * 9) / 5 + 32).toFixed(0)
+              ? Number((minTItem.parameter.parameterName * 9) / 5 + 32).toFixed(0)
               : "",
             //最高華氏
             maxFahrenheit: maxTItem
-              ? Number((maxTItem.elementValue[0].value * 9) / 5 + 32).toFixed(0)
+              ? Number((maxTItem.parameter.parameterName * 9) / 5 + 32).toFixed(0)
               : "",
           });
 
@@ -336,7 +340,7 @@ export default {
           weatherNight.push({
             //天氣概況
             status: weatherNightDecItem
-              ? weatherNightDecItem.elementValue[0].value
+              ? weatherNightDecItem.parameter.parameterName
               : "",
             //最低攝氏
             minCelsius: minCelsius2,
@@ -345,13 +349,13 @@ export default {
             //最低華氏
             minFahrenheit: nightMinTItem
               ? Number(
-                  (nightMinTItem.elementValue[0].value * 9) / 5 + 32
+                  (nightMinTItem.parameter.parameterName * 9) / 5 + 32
                 ).toFixed(0)
               : "",
             //最高華氏
             maxFahrenheit: nightMaxTItem
               ? Number(
-                  (nightMaxTItem.elementValue[0].value * 9) / 5 + 32
+                  (nightMaxTItem.parameter.parameterName * 9) / 5 + 32
                 ).toFixed(0)
               : "",
           });
@@ -360,7 +364,7 @@ export default {
           weatherAvg.push({
             //天氣概況
             status: weatherNightDecItem
-              ? weatherNightDecItem.elementValue[0].value
+              ? weatherNightDecItem.parameter.parameterName
               : "",
             //最低攝氏
             minCelsius: avgMinCelsius,
